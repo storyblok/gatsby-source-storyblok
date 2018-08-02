@@ -16,7 +16,8 @@ module.exports = {
       options: {
         accessToken: 'YOUR_TOKEN',
         homeSlug: 'home',
-        version: 'draft'
+        version: 'draft',
+        timeout: 1000 // only needed if you want to increase the request timeout
       }
     }
   ]
