@@ -5,16 +5,6 @@ const stringify = require('json-stringify-safe');
 const StoryblokClient = require('storyblok-js-client');
 
 /**
- * Converts a kebap-case string to PascalCase.
- *
- * @param {*} string the string to convert
- */
-const convertToPascal = string => {
-  const result = string.replace(/(\-\w)/g, matches => matches[1].toUpperCase());
-  return `${result.charAt(0).toUpperCase()}${result.slice(1)}`;
-};
-
-/**
  * Create a function that creates a function that fetches paginated storyblok data from the CDN.
  *
  * @param {*} client the storyblok client
@@ -70,13 +60,10 @@ const createFetcherBase = (client, version, setPluginStatus) => type => { // cur
  *
  * @param {*} createNode the gatsby callback to create a GraphQL node
  * @param {*} name the name of the node
+ * @param {*} predicate optional, a processor function that will be applied to every node before it is handed to gatsby
  */
-const createItemsProcessor = (createNode, name) => items => {
+const createItemsProcessor = (createNode, name, predicate) => items => {
   for (const item of items) {
-    if (item.content) { // Special case Story
-      item.content = stringify(item.content);
-    }
-
     const node = Object.assign({}, item, {
       id: `${name.toLowerCase()}-${item.id}`,
       parent: null,
@@ -88,6 +75,9 @@ const createItemsProcessor = (createNode, name) => items => {
       }
     });
 
+    if (predicate) {
+      predicate(node);
+    }
     createNode(node);
   }
 };
@@ -109,12 +99,22 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
   // If there are dataSources specified, load them
   const dataSources = (options.dataSources || []).map(s => {
     const fetcher = createPaginatedFetcher(`cdn/datasource_entries?datasource=${s}`);
-    return fetcher().then(createItemsProcessor(createNode, `StoryblokDataSource${convertToPascal(s)}`));
+    const processor = createItemsProcessor(
+      createNode,
+      'StoryblokDataSourceEntry',
+      item => item.dataSource = s,
+    );
+
+    return fetcher().then(processor);
   });
 
   // Then insert everything into GraphQL
   const fetchingStories = fetchStories()
-    .then(createItemsProcessor(createNode, 'StoryblokEntry'));
+    .then(createItemsProcessor(
+      createNode,
+      'StoryblokEntry',
+      item => item.content = stringify(item.content),
+    ));
   const fetchingTags = fetchTags()
     .then(createItemsProcessor(createNode, 'StoryblokTag'));
 
