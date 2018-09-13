@@ -27,7 +27,7 @@ const createFetcherBase = (client, version, setPluginStatus) => type => { // cur
 
           const keys = Object.keys(res.data);
 
-          if (keys.length > 0) {
+          if (keys.length != 1) {
             throw new Error("Got multiple keys in res.data from the API.");
           }
 
