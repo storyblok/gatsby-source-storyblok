@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const stringify = require('json-stringify-safe');
 const StoryblokClient = require('storyblok-js-client');
+const convertToPascal = require('./convert-case');
 
 /**
  * Create a function that creates a function that fetches paginated storyblok data from the CDN.
@@ -68,7 +69,7 @@ const createItemsProcessor = (createNode, name) => items => {
     }
 
     const node = Object.assign({}, item, {
-      id: `storyblok-${item.id}`,
+      id: `${name.toLowerCase()}-${item.id}`,
       parent: null,
       children: [],
       internal: {
@@ -93,17 +94,20 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
     setPluginStatus,
   );
 
-  const fetchDataSources = createPaginatedFetcher('cdn/datasource_entries');
   const fetchStories = createPaginatedFetcher('cdn/stories');
   const fetchTags = createPaginatedFetcher('cdn/tags');
 
+  // If there are dataSources specified, load them
+  const dataSources = (options.dataSources || []).map(s => {
+    const fetcher = createPaginatedFetcher(`cdn/datasource_entries?datasource=${s}`);
+    return fetcher().then(createItemsProcessor(createNode, `StoryblokDataSource${convertToPascal(s)}`));
+  });
+
   // Then insert everything into GraphQL
-  const fetchingDataSources = fetchDataSources()
-    .then(createItemsProcessor(createNode, 'StoryblokDataSource'));
   const fetchingStories = fetchStories()
     .then(createItemsProcessor(createNode, 'StoryblokEntry'));
   const fetchingTags = fetchTags()
     .then(createItemsProcessor(createNode, 'StoryblokTag'));
 
-  return Promise.all([fetchingDataSources, fetchingStories, fetchingTags]);
+  return Promise.all([fetchingStories, fetchingTags].concat(dataSources));
 };
