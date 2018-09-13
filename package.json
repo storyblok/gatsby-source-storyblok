@@ -15,11 +15,8 @@
     "storyblok",
     "headless-cms"
   ],
-  "license": "MIT",
-  "scripts": {
-    "build": "babel src --out-dir ."
-  },
   "main": "index.js",
+  "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0"
   }
