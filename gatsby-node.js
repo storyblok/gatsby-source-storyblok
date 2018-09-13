@@ -110,7 +110,7 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
     const processEntries = createItemsProcessor(
       createNode,
       'StoryblokDataSourceEntry',
-      item => item.dataSource = s,
+      item => item.data_source = s,
     );
 
     return fetchEntries().then(processEntries);
