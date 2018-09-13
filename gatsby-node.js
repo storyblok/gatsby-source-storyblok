@@ -3,7 +3,16 @@
 const crypto = require('crypto');
 const stringify = require('json-stringify-safe');
 const StoryblokClient = require('storyblok-js-client');
-const convertToPascal = require('./convert-case');
+
+/**
+ * Converts a kebap-case string to PascalCase.
+ *
+ * @param {*} string the string to convert
+ */
+const convertToPascal = string => {
+  const result = string.replace(/(\-\w)/g, matches => matches[1].toUpperCase());
+  return `${result.charAt(0).toUpperCase()}${result.slice(1)}`;
+};
 
 /**
  * Create a function that creates a function that fetches paginated storyblok data from the CDN.
