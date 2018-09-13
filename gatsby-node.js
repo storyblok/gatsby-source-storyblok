@@ -86,7 +86,7 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
   const { createNode, setPluginStatus } = boundActionCreators;
   const client = new StoryblokClient(options);
 
-  // First create the functions that abstract the API pagination
+  // First create the functions that abstract the API pagination and pre-processing
   const createPaginatedFetcher = createFetcherBase(
     client,
     options.version,
@@ -96,27 +96,29 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
   const fetchStories = createPaginatedFetcher('cdn/stories');
   const fetchTags = createPaginatedFetcher('cdn/tags');
 
-  // If there are dataSources specified, load them
-  const dataSources = (options.dataSources || []).map(s => {
-    const fetcher = createPaginatedFetcher(`cdn/datasource_entries?datasource=${s}`);
-    const processor = createItemsProcessor(
+  const processStories = createItemsProcessor(
+    createNode,
+    'StoryblokEntry',
+    item => item.content = stringify(item.content),
+  );
+  const processTags = createItemsProcessor(createNode, 'StoryblokTag');
+
+  // Load data sources specified in the config. Specifying them in the config is
+  // required for now, but hopefully can be made simpler in the future.
+  const fetchingDataSources = (options.dataSources || []).map(s => {
+    const fetchEntries = createPaginatedFetcher(`cdn/datasource_entries?datasource=${s}`);
+    const processEntries = createItemsProcessor(
       createNode,
       'StoryblokDataSourceEntry',
       item => item.dataSource = s,
     );
 
-    return fetcher().then(processor);
+    return fetchEntries().then(processEntries);
   });
 
-  // Then insert everything into GraphQL
-  const fetchingStories = fetchStories()
-    .then(createItemsProcessor(
-      createNode,
-      'StoryblokEntry',
-      item => item.content = stringify(item.content),
-    ));
-  const fetchingTags = fetchTags()
-    .then(createItemsProcessor(createNode, 'StoryblokTag'));
+  const fetchingStories = fetchStories().then(processStories);
+  const fetchingTags = fetchTags().then(processTags);
 
-  return Promise.all([fetchingStories, fetchingTags].concat(dataSources));
+  // And wait until everything has been inserted into GraphQL
+  return Promise.all([fetchingStories, fetchingTags].concat(fetchingDataSources));
 };
