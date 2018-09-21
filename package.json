@@ -1,5 +1,5 @@
 {
-  "name": "@neolegends/gatsby-source-storyblok",
+  "name": "gatsby-source-storyblok",
   "description": "Gatsby source plugin for building websites using the Storyblok headless CMS as a data source.",
   "version": "0.1.2",
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
