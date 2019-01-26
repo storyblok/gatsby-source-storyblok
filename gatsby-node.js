@@ -90,7 +90,7 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
   const createPaginatedFetcher = createFetcherBase(
     client,
     options.version,
-    setPluginStatus,
+    setPluginStatus
   );
 
   const fetchStories = createPaginatedFetcher('cdn/stories');
@@ -99,7 +99,7 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
   const processStories = createItemsProcessor(
     createNode,
     'StoryblokEntry',
-    item => item.content = stringify(item.content),
+    item => item.content = stringify(item.content)
   );
   const processTags = createItemsProcessor(createNode, 'StoryblokTag');
 
@@ -110,7 +110,7 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
     const processEntries = createItemsProcessor(
       createNode,
       'StoryblokDataSourceEntry',
-      item => item.data_source = s,
+      item => item.data_source = s
     );
 
     return fetchEntries().then(processEntries);
