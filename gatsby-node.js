@@ -20,7 +20,7 @@ const createFetcherBase = (client, version, setPluginStatus) => type => { // cur
       return client.get(type, {
         version,
         per_page: 10,
-        page,
+        page
       })
         .then(res => {
           setPluginStatus({ lastFetched: Date.now() });
