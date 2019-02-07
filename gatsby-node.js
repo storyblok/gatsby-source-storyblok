@@ -93,7 +93,17 @@ exports.sourceNodes = ({ boundActionCreators }, options) => {
     setPluginStatus
   );
 
-  const fetchStories = createPaginatedFetcher('cdn/stories');
+  let params = '?'
+
+  if (options.resolveLinks) {
+    params += 'resolve_links=1&'
+  }
+
+  if (options.resolveRelations) {
+    params += 'resolve_relations=' + options.resolveRelations.join(',') + '&'
+  }
+
+  const fetchStories = createPaginatedFetcher('cdn/stories' + params);
   const fetchTags = createPaginatedFetcher('cdn/tags');
 
   const processStories = createItemsProcessor(
