@@ -16,13 +16,20 @@ module.exports = {
       options: {
         accessToken: 'YOUR_TOKEN',
         homeSlug: 'home',
-        version: 'draft',
-        timeout: 5000 // only needed if you want to increase the request timeout - default is 5000
+        version: 'draft'
       }
     }
   ]
 }
 ```
+
+### Plugin options
+
+* `accessToken`: Your Storyblok draft token
+* `homeSlug`: The slug of the "home" story. Used to get the content at the root level /
+* `version`: 'draft' or 'published'
+* `timeout`: Optionally provide a timeout for the api request
+* `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['related_articles', 'author'].
 
 ## How to query?
 
