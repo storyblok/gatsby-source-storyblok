@@ -59,22 +59,8 @@ module.exports = {
 ### A Single Content Entry
 ```GraphQL
 {
-  StoryblokEntry {
-    edges {
-      node {
-        id
-        name
-        created_at
-        published_at
-        uuid
-        slug
-        full_slug
-        content
-        is_startpage
-        parent_id
-        group_id
-      }
-    }
+  storyblokEntry(slug: { eq: "global-navi" }) {
+    content
   }
 }
 ```
