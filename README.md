@@ -34,6 +34,9 @@ module.exports = {
 ## How to query?
 
 ### All Content Entries
+
+To get all entries unfiltered you can do the following query:
+
 ```GraphQL
 {
   allStoryblokEntry {
@@ -56,6 +59,61 @@ module.exports = {
 }
 ```
 
+#### Filtering of content inside a folder
+
+The following example shows a filter to get all items from a news folder:
+
+```GraphQL
+{
+  allStoryblokEntry(filter: {full_slug: {regex: "/^news\//"}}) {
+    edges {
+      node {
+        name
+        full_slug
+      }
+    }
+  }
+}
+```
+
+#### Filtering of languages
+
+If you use field level translations you can filter for a specific language using following query:
+
+```GraphQL
+{
+  allStoryblokEntry(filter: {lang: {eq: "de"}}) {
+    edges {
+      node {
+        name
+        full_slug
+      }
+    }
+  }
+}
+```
+
+
+#### Filtering on content type fields
+
+Every field of your content types is available via the prefix ```field_```.
+
+This lets you for example to query for a specific component:
+
+```GraphQL
+{
+  allStoryblokEntry(filter: {field_component: {eq: "page"}}) {
+    edges {
+      node {
+        name
+        full_slug
+      }
+    }
+  }
+}
+```
+
+
 ### A Single Content Entry
 ```GraphQL
 {
@@ -66,20 +124,6 @@ module.exports = {
 ```
 
 ### Datasource Entries
-
-To be able to query data sources, the plugin needs to know which ones to load. You need to specify the data sources to load through the config like this:
-
-```
-{
-  resolve: 'gatsby-source-storyblok',
-  options: {
-    dataSources: ['data-source-1', 'data-source-2', 'data-source-3'],
-    // ... more config
-  }
-},
-```
-Then you can use following GraphQL query:
-
 ```GraphQL
 allStoryblokDataSourceEntry {
   edges {
