@@ -26,7 +26,12 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
           if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
             continue;
           }
-          item['field_' + prop] = item.content[prop]
+          const objectType = Object.prototype.toString.call(item.content[prop])
+                                                      .replace('[object ', '')
+                                                      .replace(']', '')
+                                                      .toLowerCase()
+          const type = prop == 'component' ? '' : ('_' + objectType)
+          item['field_' + prop + type] = item.content[prop]
         }
         item.content = stringify(item.content)
       }

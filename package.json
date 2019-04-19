@@ -1,7 +1,7 @@
 {
   "name": "gatsby-source-storyblok",
   "description": "Gatsby source plugin for building websites using the Storyblok headless CMS as a data source.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
   "dependencies": {
     "json-stringify-safe": "^5.0.1",
