@@ -23,7 +23,7 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
       params: getStoryParams(languages[spKey], options),
       process: (item) => {
         for (var prop in item.content) {
-          if (!item.content.hasOwnProperty(prop)) {
+          if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
             continue;
           }
           item['field_' + prop] = item.content[prop]
