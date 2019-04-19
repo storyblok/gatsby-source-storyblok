@@ -66,20 +66,6 @@ module.exports = {
 ```
 
 ### Datasource Entries
-
-To be able to query data sources, the plugin needs to know which ones to load. You need to specify the data sources to load through the config like this:
-
-```
-{
-  resolve: 'gatsby-source-storyblok',
-  options: {
-    dataSources: ['data-source-1', 'data-source-2', 'data-source-3'],
-    // ... more config
-  }
-},
-```
-Then you can use following GraphQL query:
-
 ```GraphQL
 allStoryblokDataSourceEntry {
   edges {
