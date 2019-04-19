@@ -9,6 +9,10 @@ module.exports = function(language, options) {
     params.resolve_relations = options.resolveRelations.join(',')
   }
 
+  if (options.version) {
+    params.version = options.version
+  }
+
   if (language.length > 0) {
     params.starts_with = language
   }
