@@ -34,6 +34,9 @@ module.exports = {
 ## How to query?
 
 ### All Content Entries
+
+To get all entries unfiltered you can do the following query:
+
 ```GraphQL
 {
   allStoryblokEntry {
@@ -55,6 +58,61 @@ module.exports = {
   }
 }
 ```
+
+#### Filtering of content inside a folder
+
+The following example shows a filter to get all items from a news folder:
+
+```GraphQL
+{
+  allStoryblokEntry(filter: {full_slug: {regex: "/^news\//"}}) {
+    edges {
+      node {
+        name
+        full_slug
+      }
+    }
+  }
+}
+```
+
+#### Filtering of languages
+
+If you use field level translations you can filter for a specific language using following query:
+
+```GraphQL
+{
+  allStoryblokEntry(filter: {lang: {eq: "de"}}) {
+    edges {
+      node {
+        name
+        full_slug
+      }
+    }
+  }
+}
+```
+
+
+#### Filtering on content type fields
+
+Every field of your content types is available via the prefix ```field_```.
+
+This lets you for example to query for a specific component:
+
+```GraphQL
+{
+  allStoryblokEntry(filter: {field_component: {eq: "page"}}) {
+    edges {
+      node {
+        name
+        full_slug
+      }
+    }
+  }
+}
+```
+
 
 ### A Single Content Entry
 ```GraphQL
