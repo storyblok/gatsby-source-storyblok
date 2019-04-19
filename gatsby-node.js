@@ -23,6 +23,7 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
       params: getStoryParams(languages[spKey], options),
       process: (item) => {
         item.content = stringify(item.content)
+        item.content_type = item.content.component
       }
     })
   }
