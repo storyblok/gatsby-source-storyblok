@@ -31,7 +31,7 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
                                                       .replace(']', '')
                                                       .toLowerCase()
 
-          if (objectType === 'array') {
+          if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
             continue;
           }
 
