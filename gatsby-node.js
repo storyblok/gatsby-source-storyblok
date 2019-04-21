@@ -30,7 +30,13 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
                                                       .replace('[object ', '')
                                                       .replace(']', '')
                                                       .toLowerCase()
+
+          if (objectType === 'array') {
+            continue;
+          }
+
           const type = prop == 'component' ? '' : ('_' + objectType)
+
           item['field_' + prop + type] = item.content[prop]
         }
         item.content = stringify(item.content)
