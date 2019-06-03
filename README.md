@@ -139,7 +139,7 @@ allStoryblokDataSourceEntry {
 ```
 
 ### Links
-Use the links api to create a dynamic navigation tree.
+Use the links api to create a dynamic navigation tree. To use this query you need to add `includeLinks: true` in the plugin options.
 
 ```GraphQL
 allStoryblokLinkEntry {
