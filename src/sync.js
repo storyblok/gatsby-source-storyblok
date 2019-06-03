@@ -52,7 +52,7 @@ module.exports = {
   async getAll(type, options) {
     let page = 1
     let res = await this.getPage(type, page, options)
-    let all = res.data[type]
+    let all = res.data[type].constructor === Object ? Object.values(res.data[type]) : res.data[type]
     let total = res.total
     let lastPage = Math.ceil((res.total / 25))
 

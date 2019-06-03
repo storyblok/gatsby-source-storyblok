@@ -30,6 +30,7 @@ module.exports = {
 * `version`: 'draft' or 'published'
 * `timeout`: Optionally provide a timeout for the api request
 * `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['related_articles', 'author'].
+* `includeLinks`: If 'true' you can query links by allStoryblokLinkEntry. The links query lets you create a dynamic navigation tree as it includes also content folders.
 
 ## How to query?
 
@@ -132,6 +133,27 @@ allStoryblokDataSourceEntry {
       name
       value
       data_source
+    }
+  }
+}
+```
+
+### Links
+Use the links api to create a dynamic navigation tree.
+
+```GraphQL
+allStoryblokLinkEntry {
+  edges {
+    node {
+      id
+      uuid
+      slug
+      parent_id
+      name
+      is_folder
+      published
+      is_startpage
+      position
     }
   }
 }

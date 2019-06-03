@@ -48,6 +48,12 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
     node: 'StoryblokTag'
   })
 
+  if (options.includeLinks === true) {
+    await Sync.getAll('links', {
+      node: 'StoryblokLink'
+    })
+  }
+
   const datasources = await Sync.getAll('datasources', {
     node: 'StoryblokDatasource'
   })
