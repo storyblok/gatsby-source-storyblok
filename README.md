@@ -29,7 +29,7 @@ module.exports = {
 * `homeSlug`: The slug of the "home" story. Used to get the content at the root level /
 * `version`: 'draft' or 'published'
 * `timeout`: Optionally provide a timeout for the api request
-* `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['related_articles', 'author'].
+* `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['article.related_articles', 'article.author'].
 * `includeLinks`: If 'true' you can query links by allStoryblokLinkEntry. The links query lets you create a dynamic navigation tree as it includes also content folders.
 
 ## How to query?
