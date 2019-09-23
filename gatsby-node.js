@@ -50,7 +50,8 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
 
   if (options.includeLinks === true) {
     await Sync.getAll('links', {
-      node: 'StoryblokLink'
+      node: 'StoryblokLink',
+      params: getStoryParams('', options)
     })
   }
 
