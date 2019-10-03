@@ -28,8 +28,10 @@ module.exports = {
   },
 
   createNode(name, item) {
+    const lang = item.lang || 'default'
     const node = Object.assign({}, item, {
-      id: `${name.toLowerCase()}-${item.id}-${item.lang}`,
+      id: `${name.toLowerCase()}-${item.id}-${lang}`,
+      internalId: item.id,
       parent: null,
       children: [],
       internal: {

@@ -1,11 +1,14 @@
 {
   "name": "gatsby-source-storyblok",
   "description": "Gatsby source plugin for building websites using the Storyblok headless CMS as a data source.",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
   "dependencies": {
     "json-stringify-safe": "^5.0.1",
     "storyblok-js-client": "^1.0.22"
+  },
+  "scripts": {
+    "test": "jest"
   },
   "deprecated": false,
   "private": false,
@@ -19,7 +22,8 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.26.0"
+    "babel-cli": "^6.26.0",
+    "jest": "^24.9.0"
   },
   "peerDependencies": {
     "storyblok-react": "^0.0.6"
