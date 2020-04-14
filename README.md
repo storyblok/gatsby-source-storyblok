@@ -29,6 +29,7 @@ module.exports = {
 * `homeSlug`: The slug of the "home" story. Used to get the content at the root level /
 * `version`: 'draft' or 'published'
 * `timeout`: Optionally provide a timeout for the api request
+* `resolveLinks`: This will automatically resolve internal links of the multilink field type. If the value is `story` the whole story object will be included.  If the value is `url` only uuid, id, name, path, slug and url (url is a computed property which returns the "Real path" if defined to use it for navigation links) will be included. 
 * `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['article.related_articles', 'article.author'].
 * `includeLinks`: If 'true' you can query links by allStoryblokLinkEntry. The links query lets you create a dynamic navigation tree as it includes also content folders.
 
