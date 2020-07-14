@@ -236,3 +236,9 @@ allStoryblokLinkEntry {
   }
 }
 ```
+
+## Contribution
+
+Fork me on [Github](https://github.com/storyblok/gatsby-source-storyblok).
+
+This project use [semantic-release](https://semantic-release.gitbook.io/semantic-release/) for generate new versions by using commit messages and we use the Angular Convention to naming the commits. Check [this question](https://semantic-release.gitbook.io/semantic-release/support/faq#how-can-i-change-the-type-of-commits-that-trigger-a-release) about it in semantic-release FAQ
