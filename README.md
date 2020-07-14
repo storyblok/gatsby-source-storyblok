@@ -2,11 +2,15 @@
 
 This is a Gatsby source plugin for building websites using the [Storyblok](https://www.storyblok.com) headless CMS with true visual preview as a data source.
 
-## How to install
+## Install
 
-`npm install --save gatsby-source-storyblok`
+```sh
+$ npm install --save gatsby-source-storyblok # or yarn add gatsby-source-storyblok
+```
 
-## How to use?
+## Usage
+
+1. You need to declare the plugin use and its options in `gatsby-config.js`
 
 ```JavaScript
 module.exports = {
@@ -15,7 +19,6 @@ module.exports = {
       resolve: 'gatsby-source-storyblok',
       options: {
         accessToken: 'YOUR_TOKEN',
-        homeSlug: 'home',
         version: 'draft'
       }
     }
@@ -23,10 +26,84 @@ module.exports = {
 }
 ```
 
-### Plugin options
+2. You need to create a [template](https://www.gatsbyjs.org/docs/programmatically-create-pages-from-data/#specifying-a-template) file to get the data from GraphQL
+
+```js
+import React from 'react'
+import { graphql } from 'gatsby'
+
+export default function StoryblokEntry ({ data }) {
+  const story = data.storyblokEntry
+
+  return (
+    <div>{story.name}</div>
+  )
+}
+
+export const query = graphql`
+  query($slug: String!) {
+    storyblokEntry(slug: { eq: $slug }) {
+      id
+      name
+      full_slug
+    }
+  }
+`
+```
+
+3. After this, you need to create the pages for your application. For this, edit your `gatsby-node.js`.
+
+```js
+const path = require('path')
+
+exports.createPages = async ({ graphql, actions }) => {
+  const storyblokEntry = path.resolve('src/templates/storyblok-entry.js')
+
+  // querying the storyblok data from GraphQL data layer
+  const { data } = await graphql(
+    `query {
+      allStoryblokEntry {
+        edges {
+          node {
+            id
+            full_slug
+          }
+        }
+      }
+    }`
+  )
+
+  // creating pages using createPage function like described in the documentation
+  // https://www.gatsbyjs.org/docs/programmatically-create-pages-from-data/#creating-pages
+  data.allStoryblokEntry.edges.forEach(edge => {
+    const full_slug = edge.node.full_slug
+
+    actions.createPage({
+      path: full_slug,
+      component: storyblokEntry,
+      context: {
+        slug: full_slug
+      },
+    })
+  })
+}
+```
+
+## The options object in details
+
+```js
+{
+  resolve: 'gatsby-source-storyblok',
+  options: {
+    accessToken: 'YOUR_TOKEN',
+    version: 'draft',
+    resolveRelations: [''],
+    includeLinks: false
+  }
+}
+```
 
 * `accessToken`: Your Storyblok draft token
-* `homeSlug`: The slug of the "home" story. Used to get the content at the root level /
 * `version`: 'draft' or 'published'
 * `timeout`: Optionally provide a timeout for the api request
 * `resolveLinks`: This will automatically resolve internal links of the multilink field type. If the value is `story` the whole story object will be included.  If the value is `url` only uuid, id, name, path, slug and url (url is a computed property which returns the "Real path" if defined to use it for navigation links) will be included. 
