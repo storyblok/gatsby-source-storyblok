@@ -202,9 +202,25 @@ This lets you for example to query for a specific component:
 }
 ```
 
-### Datasource Entries
+### Datasources (without the entries)
+
 ```GraphQL
-allStoryblokDataSourceEntry {
+allStoryblokDatasource(filter: {data_source: {eq: null}}) {
+  edges {
+    node {
+      id
+      value
+      name
+      data_source
+    }
+  }
+}
+```
+
+### Datasource Entries by specific Datasource
+
+```GraphQL
+allStoryblokDatasource(filter: { data_source: { eq: "DATASOURCE_SLUG" } }) {
   edges {
     node {
       id
