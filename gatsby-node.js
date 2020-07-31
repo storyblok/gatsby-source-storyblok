@@ -45,7 +45,11 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
   }
 
   await Sync.getAll('tags', {
-    node: 'StoryblokTag'
+    node: 'StoryblokTag',
+    params: getStoryParams('', options),
+    process: (item) => {
+      item.id = item.name
+    }
   })
 
   if (options.includeLinks === true) {
