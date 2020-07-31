@@ -28,8 +28,23 @@ module.exports = {
   },
 
   createNode(name, item) {
+    const nodeObject = this.builderNode(name, item)
+
+    this.$createNode(nodeObject)
+  },
+
+  builderNode (name, item) {
+    if (name ==='StoryblokDatasourceEntry') {
+      return this.factoryDatasourceEntryNode(name, item)
+    }
+
+    return this.factoryDefaultNode(name, item)
+  },
+
+  factoryDefaultNode (name, item) {
     const lang = item.lang || 'default'
-    const node = Object.assign({}, item, {
+
+    return Object.assign({}, item, {
       id: `${name.toLowerCase()}-${item.id}-${lang}`,
       internalId: item.id,
       parent: null,
@@ -40,8 +55,21 @@ module.exports = {
         contentDigest: crypto.createHash(`md5`).update(stringify(item)).digest(`hex`)
       }
     })
+  },
 
-    this.$createNode(node)
+  factoryDatasourceEntryNode (name, item) {
+    const dimension = item.data_source_dimension || 'default'
+    return Object.assign({}, item, {
+      id: `${name.toLowerCase()}-${item.id}-${dimension}`,
+      internalId: item.id,
+      parent: null,
+      children: [],
+      internal: {
+        mediaType: `application/json`,
+        type: name,
+        contentDigest: crypto.createHash(`md5`).update(stringify(item)).digest(`hex`)
+      }
+    })
   },
 
   async getOne(single, type, options) {

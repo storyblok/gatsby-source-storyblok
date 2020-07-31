@@ -17,10 +17,10 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
   const languages = space.language_codes.map((lang) => { return lang + '/*' })
   languages.push('')
 
-  for (var spKey = 0; spKey < languages.length; spKey++) {
+  for (const language of languages) {
     await Sync.getAll('stories', {
       node: 'StoryblokEntry',
-      params: getStoryParams(languages[spKey], options),
+      params: getStoryParams(language, options),
       process: (item) => {
         for (var prop in item.content) {
           if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
@@ -59,13 +59,34 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
     node: 'StoryblokDatasource'
   })
 
-  for (var dsKey = 0; dsKey < datasources.length; dsKey++) {
+  for (const datasource of datasources) {
+    const datasourceSlug = datasource.slug
+
     await Sync.getAll('datasource_entries', {
-      node: 'StoryblokDatasource',
-      params: {datasource: datasources[dsKey].slug},
+      node: 'StoryblokDatasourceEntry',
+      params: {
+        datasource: datasourceSlug
+      },
       process: (item) => {
-        item.data_source = datasources[dsKey].slug
+        item.data_source_dimension = null
+        item.data_source = datasourceSlug
       }
     })
+
+    const datasourceDimensions = datasource.dimensions || []
+
+    for (const dimension of datasourceDimensions) {
+      await Sync.getAll('datasource_entries', {
+        node: 'StoryblokDatasourceEntry',
+        params: {
+          datasource: datasourceSlug,
+          dimension: dimension.entry_value
+        },
+        process: (item) => {
+          item.data_source_dimension = dimension.entry_value
+          item.data_source = datasourceSlug
+        }
+      })
+    }
   }
 }
