@@ -202,10 +202,10 @@ This lets you for example to query for a specific component:
 }
 ```
 
-### Datasources (without the entries)
+### Datasources
 
 ```GraphQL
-allStoryblokDatasource(filter: {data_source: {eq: null}}) {
+allStoryblokDatasource {
   edges {
     node {
       id
@@ -217,16 +217,35 @@ allStoryblokDatasource(filter: {data_source: {eq: null}}) {
 }
 ```
 
-### Datasource Entries by specific Datasource
+### Datasource Entries
+
+This will return all datasources, with or not dimensions values:
 
 ```GraphQL
-allStoryblokDatasource(filter: { data_source: { eq: "DATASOURCE_SLUG" } }) {
+allStoryblokDatasourceEntry(filter: { data_source: { eq: "DATASOURCE_SLUG" } }) {
   edges {
     node {
       id
       name
       value
       data_source
+      data_source_dimension
+    }
+  }
+}
+```
+
+If you want to **filter by a specific dimension**, you should use:
+
+```GraphQL
+allStoryblokDatasourceEntry(filter: { data_source: { eq: "DATASOURCE_SLUG" }, data_source_dimension: { eq: "DATASOURCE_DIMENSION_VALUE" } }) {
+  edges {
+    node {
+      id
+      name
+      value
+      data_source
+      data_source_dimension
     }
   }
 }
