@@ -50,7 +50,6 @@ module.exports = {
       parent: null,
       children: [],
       internal: {
-        mediaType: `application/json`,
         type: name,
         contentDigest: crypto.createHash(`md5`).update(stringify(item)).digest(`hex`)
       }
@@ -65,7 +64,6 @@ module.exports = {
       parent: null,
       children: [],
       internal: {
-        mediaType: `application/json`,
         type: name,
         contentDigest: crypto.createHash(`md5`).update(stringify(item)).digest(`hex`)
       }
