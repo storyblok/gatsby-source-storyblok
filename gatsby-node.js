@@ -39,7 +39,6 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
 
           item['field_' + prop + type] = item.content[prop]
         }
-        item.content = stringify(item.content)
       }
     })
   }
