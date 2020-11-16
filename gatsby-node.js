@@ -5,7 +5,7 @@ const stringify = require('json-stringify-safe')
 
 exports.sourceNodes = async function({ boundActionCreators }, options) {
   const { createNode, setPluginStatus } = boundActionCreators;
-  const client = new StoryblokClient(options, 'https://mapi.storyblok.com/v1');
+  const client = new StoryblokClient(options, 'https://api.storyblok.com/v1');
 
   Sync.init({
     createNode,
@@ -14,7 +14,7 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
   })
 
   const space = await Sync.getSpace()
-  const languages = space.language_codes.map((lang) => { return lang + '/*' })
+  const languages = (options.languages ?? space.language_codes).map((lang) => { return lang + '/*' })
   languages.push('')
 
   for (const language of languages) {
