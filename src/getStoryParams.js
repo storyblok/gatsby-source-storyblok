@@ -5,7 +5,6 @@
  * @param  {Array<String>} options.resolveRelations? resolve_relations field
  * @param  {String}        options.resolveLinks? can be story or url
  * @param  {String}        options.version? can be draft or released
- * @param  {String}        options.language? array of languages
  */
 const getStoryParams = function(language = '', options = {}) {
   let params = {}
