@@ -26,10 +26,6 @@ const getStoryParams = function(language = '', options = {}) {
     params.language = options.language
   }
 
-  if (language.length > 0) {
-    params.starts_with = language
-  }
-
   return params
 }
 
