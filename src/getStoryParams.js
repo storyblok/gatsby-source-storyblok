@@ -21,8 +21,8 @@ const getStoryParams = function(language = '', options = {}) {
     params.version = options.version
   }
 
-  if (options.language) {
-    params.language = options.language
+  if (language.length > 0) {
+    params.starts_with = language
   }
 
   return params
