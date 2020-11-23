@@ -14,7 +14,7 @@ exports.sourceNodes = async function({ boundActionCreators }, options) {
   })
 
   const space = await Sync.getSpace()
-  const languages = (options.languages ?? space.language_codes).map((lang) => { return lang + '/*' })
+  const languages = (options.languages ? options.languages : space.language_codes).map((lang) => { return lang + '/*' })
   languages.push('')
 
   for (const language of languages) {
