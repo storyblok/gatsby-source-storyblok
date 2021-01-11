@@ -5,7 +5,7 @@
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
   "dependencies": {
     "json-stringify-safe": "^5.0.1",
-    "storyblok-js-client": "^2.5.2"
+    "storyblok-js-client": "^3.3.1"
   },
   "scripts": {
     "test": "jest"
@@ -22,7 +22,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "babel-cli": "^6.18.0",
     "jest": "^26.1.0"
   },
   "peerDependencies": {
