@@ -4,6 +4,7 @@
   "version": "0.0.0-development",
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
   "dependencies": {
+    "axios": "^0.21.1",
     "json-stringify-safe": "^5.0.1",
     "storyblok-js-client": "^3.3.1"
   },
