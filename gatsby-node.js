@@ -3,8 +3,8 @@ const Sync = require('./src/sync')
 const getStoryParams = require('./src/getStoryParams')
 const stringify = require('json-stringify-safe')
 
-exports.sourceNodes = async function({ boundActionCreators }, options) {
-  const { createNode, setPluginStatus } = boundActionCreators;
+exports.sourceNodes = async function({ actions }, options) {
+  const { createNode, setPluginStatus } = actions;
   const client = new StoryblokClient(options, 'https://api.storyblok.com/v1');
 
   Sync.init({
