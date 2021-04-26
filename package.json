@@ -22,11 +22,11 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "axios": "^0.21.1",
     "babel-cli": "^6.26.0",
     "jest": "^26.1.0"
   },
   "peerDependencies": {
-    "axios": "^0.21.1",
     "storyblok-react": "^0.1.0"
   },
   "homepage": "https://www.storyblok.com",
