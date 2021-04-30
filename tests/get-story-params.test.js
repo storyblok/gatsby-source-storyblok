@@ -10,7 +10,7 @@ describe('getStoryParams() function', () => {
       resolveLinks: 'story'
     }
     expect(getStoryParams('en', options)).toEqual({
-      starts_with: 'en',
+      language: 'en',
       resolve_links: 'story'
     })
   })
@@ -20,7 +20,7 @@ describe('getStoryParams() function', () => {
       resolveLinks: 'url'
     }
     expect(getStoryParams('en', options)).toEqual({
-      starts_with: 'en',
+      language: 'en',
       resolve_links: 'url'
     })
   })
@@ -30,7 +30,7 @@ describe('getStoryParams() function', () => {
       version: 'draft'
     }
     expect(getStoryParams('en', options)).toEqual({
-      starts_with: 'en',
+      language: 'en',
       version: 'draft'
     })
   })
@@ -41,7 +41,7 @@ describe('getStoryParams() function', () => {
       resolveRelations: ['page.author', 'page.categories']
     }
     expect(getStoryParams('en', options)).toEqual({
-      starts_with: 'en',
+      language: 'en',
       version: 'draft',
       resolve_relations: 'page.author,page.categories'
     })
