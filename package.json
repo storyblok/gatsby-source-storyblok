@@ -5,7 +5,7 @@
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
   "dependencies": {
     "json-stringify-safe": "^5.0.1",
-    "storyblok-js-client": "^4.0.5"
+    "storyblok-js-client": "^4.0.6"
   },
   "scripts": {
     "test": "jest"
