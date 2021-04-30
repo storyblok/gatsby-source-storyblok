@@ -22,7 +22,7 @@ const getStoryParams = function(language = '', options = {}) {
   }
 
   if (language.length > 0) {
-    params.starts_with = language
+    params.language = language
   }
 
   return params
