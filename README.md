@@ -27,7 +27,11 @@ module.exports = {
 }
 ```
 
-2. You need to create a [template](https://www.gatsbyjs.org/docs/programmatically-create-pages-from-data/#specifying-a-template) file to get the data from GraphQL
+### With Gatsby's createPages
+
+For more info regarding `createPages` see the Gatsby docs: [docs/reference/config-files/gatsby-node/#createPages](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#createPages)
+
+2a. You need to create a [template](https://www.gatsbyjs.org/docs/programmatically-create-pages-from-data/#specifying-a-template) file to get the data from GraphQL
 
 ```js
 import React from 'react'
@@ -52,7 +56,7 @@ export const query = graphql`
 `
 ```
 
-3. After this, you need to create the pages for your application. For this, edit your `gatsby-node.js`.
+3a. After this, you need to create the pages for your application. For this, edit your `gatsby-node.js`.
 
 ```js
 const path = require('path')
@@ -89,6 +93,113 @@ exports.createPages = async ({ graphql, actions }) => {
   })
 }
 ```
+
+
+### With Gatsby's File System Routes API
+
+For more info regarding The File System Routes API see the Gatsby docs: [docs/reference/routing/file-system-route-api/](https://www.gatsbyjs.com/docs/reference/routing/file-system-route-api/)
+
+2b. Create a collection route inside `src/pages`
+
+
+```
+|-- src
+   |-- pages
+      |-- {storyblokEntry.slug}.js
+```
+
+
+3b. Gatsby will use ths page template for each `storyblokEntry`
+
+```js
+import React from 'react'
+import { graphql } from 'gatsby'
+
+export default function StoryblokEntry({ data }) {
+  const story = data.storyblokEntry
+
+  return <div>{story.name}</div>
+}
+
+export const query = graphql`
+  query ($slug: String!) {
+    storyblokEntry(slug: { eq: $slug }) {
+      id
+      name
+      full_slug
+    }
+  }
+`
+```
+
+## Rendering Storyblok content
+
+To source Storyblok's content add `content` to your GraphQL query. By using a switch statement you can make decisions about how to render each of the bloks.
+
+```js
+import React, { Fragment } from 'react'
+import { graphql } from 'gatsby'
+
+const getBlok = (blok) => {
+  const { component } = blok
+
+  switch (component) {
+    case 'teaser':
+      return (
+        <Fragment>
+          <h2>{blok.headline}</h2>
+          <pre>{JSON.stringify(blok, null, 2)}</pre>
+        </Fragment>
+      )
+
+    case 'grid':
+      return (
+        <Fragment>
+          {blok.columns.map((column, index) => {
+            return <pre key={index}>{JSON.stringify(column, null, 2)}</pre>
+          })}
+        </Fragment>
+      )
+
+    case 'feature':
+      return (
+        <Fragment>
+          <h2>{blok.name}</h2>
+          <pre>{JSON.stringify(blok, null, 2)}</pre>
+        </Fragment>
+      )
+
+    default:
+      return null
+  }
+}
+
+export default function StoryblokEntry({ data }) {
+  const story = data.storyblokEntry
+  const { title, body } = JSON.parse(story.content)
+
+  return (
+    <div>
+      <h1>{title}</h1>
+      {body.map((blok, index) => {
+        return <Fragment key={index}>{getBlok(blok)}</Fragment>
+      })}
+    </div>
+  )
+}
+
+export const query = graphql`
+  query ($slug: String!) {
+    storyblokEntry(slug: { eq: $slug }) {
+      id
+      name
+      full_slug
+      content
+    }
+  }
+`
+```
+
 
 ## The options object in details
 
