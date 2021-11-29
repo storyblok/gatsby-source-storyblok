@@ -1,96 +1,193 @@
-const StoryblokClient = require('storyblok-js-client')
-const Sync = require('./src/sync')
-const getStoryParams = require('./src/getStoryParams')
-const stringify = require('json-stringify-safe')
+const StoryblokClient = require('storyblok-js-client');
+const Sync = require('./src/sync');
+const getStoryParams = require('./src/getStoryParams');
+const stringify = require('json-stringify-safe');
+const index = require('deepdash/index');
+const get = require('lodash.get');
+const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
-exports.sourceNodes = async function({ actions }, options) {
-  const { createNode, setPluginStatus } = actions
-  const client = new StoryblokClient(options)
+exports.sourceNodes = async function ({ actions }, options) {
+  const { createNode, setPluginStatus } = actions;
+  const client = new StoryblokClient(options);
 
   Sync.init({
     createNode,
     setPluginStatus,
-    client
-  })
+    client,
+  });
 
-  const space = await Sync.getSpace()
-  const languages = options.languages ? options.languages : space.language_codes
-  languages.push('')
+  const space = await Sync.getSpace();
+  const languages = options.languages ? options.languages : space.language_codes;
+  languages.push('');
 
   for (const language of languages) {
     await Sync.getAll('stories', {
       node: 'StoryblokEntry',
       params: getStoryParams(language, options),
       process: (item) => {
-        for (var prop in item.content) {
-          if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
-            continue;
+        if (!options.dynamicContent) {
+          for (var prop in item.content) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
+              continue;
+            }
+            const objectType = Object.prototype.toString
+              .call(item.content[prop])
+              .replace('[object ', '')
+              .replace(']', '')
+              .toLowerCase();
+
+            if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
+              continue;
+            }
+
+            const type = prop == 'component' ? '' : '_' + objectType;
+
+            item['field_' + prop + type] = item.content[prop];
           }
-          const objectType = Object.prototype.toString.call(item.content[prop])
-                                                      .replace('[object ', '')
-                                                      .replace(']', '')
-                                                      .toLowerCase()
 
-          if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
-            continue;
-          }
-
-          const type = prop == 'component' ? '' : ('_' + objectType)
-
-          item['field_' + prop + type] = item.content[prop]
+          item.content = stringify(item.content);
         }
-        item.content = stringify(item.content)
-      }
-    })
+      },
+    });
   }
 
   await Sync.getAll('tags', {
     node: 'StoryblokTag',
     params: getStoryParams('', options),
     process: (item) => {
-      item.id = item.name
-    }
-  })
+      item.id = item.name;
+    },
+  });
 
   if (options.includeLinks === true) {
     await Sync.getAll('links', {
       node: 'StoryblokLink',
-      params: getStoryParams('', options)
-    })
+      params: getStoryParams('', options),
+    });
   }
 
   const datasources = await Sync.getAll('datasources', {
-    node: 'StoryblokDatasource'
-  })
+    node: 'StoryblokDatasource',
+  });
 
   for (const datasource of datasources) {
-    const datasourceSlug = datasource.slug
+    const datasourceSlug = datasource.slug;
 
     await Sync.getAll('datasource_entries', {
       node: 'StoryblokDatasourceEntry',
       params: {
-        datasource: datasourceSlug
+        datasource: datasourceSlug,
       },
       process: (item) => {
-        item.data_source_dimension = null
-        item.data_source = datasourceSlug
-      }
-    })
+        item.data_source_dimension = null;
+        item.data_source = datasourceSlug;
+      },
+    });
 
-    const datasourceDimensions = datasource.dimensions || []
+    const datasourceDimensions = datasource.dimensions || [];
 
     for (const dimension of datasourceDimensions) {
       await Sync.getAll('datasource_entries', {
         node: 'StoryblokDatasourceEntry',
         params: {
           datasource: datasourceSlug,
-          dimension: dimension.entry_value
+          dimension: dimension.entry_value,
         },
         process: (item) => {
-          item.data_source_dimension = dimension.entry_value
-          item.data_source = datasourceSlug
-        }
-      })
+          item.data_source_dimension = dimension.entry_value;
+          item.data_source = datasourceSlug;
+        },
+      });
     }
   }
-}
+};
+
+exports.onCreateNode = async (
+  { node, actions: { createNode }, createNodeId, getCache, cache },
+  options
+) => {
+  if (!options.localAssets) {
+    return;
+  }
+
+  if (node.internal.type === 'StoryblokEntry') {
+    let imagePaths = Object.keys(index(node.content)).filter((path) => path.includes('filename'));
+
+    if (imagePaths.length) {
+      imagePaths.forEach(async (imagePath) => {
+        const newPath = imagePath.replace('.filename', '');
+        const foundAsset = get(node.content, newPath);
+        let fileNodeID;
+
+        const mediaDataCacheKey = `sb-${foundAsset.id}`;
+        const cacheMediaData = await getCache(mediaDataCacheKey);
+        const isCached = cacheMediaData && node.cv === cacheMediaData.updatedAt;
+
+        if (isCached) {
+          fileNodeID = cacheMediaData.fileNodeID;
+        }
+
+        if (!fileNodeID && foundAsset?.filename?.length) {
+          const fileNode = await createRemoteFileNode({
+            url: foundAsset.filename,
+            id: foundAsset.id,
+            alt: foundAsset.alt,
+            name: foundAsset.name,
+            title: foundAsset.title,
+            copyright: foundAsset.copyright,
+            parentNodeId: node.id,
+            createNode,
+            createNodeId,
+            getCache,
+          });
+
+          if (fileNode.id) {
+            fileNodeID = fileNode.id;
+            await cache.set(mediaDataCacheKey, {
+              fileNodeID,
+              updatedAt: node.cv,
+            });
+          }
+        }
+      });
+    }
+  }
+};
+
+exports.createSchemaCustomization = async function ({ actions, schema }, options) {
+  if (!options.dynamicContent) {
+    return;
+  }
+
+  const { createNode, setPluginStatus, createTypes } = actions;
+  const client = new StoryblokClient(options);
+
+  Sync.init({
+    createNode,
+    setPluginStatus,
+    client,
+  });
+
+  const space = await Sync.getSpace();
+  const languages = options.languages ? options.languages : space.language_codes;
+  languages.push('');
+
+  for (const language of languages) {
+    await Sync.getAll('stories', {
+      node: 'StoryblokEntry',
+      params: getStoryParams(language, options),
+      process: () => {
+        const typeDef = schema.buildObjectType({
+          name: `StoryblokEntry`,
+          fields: {
+            content: 'JSON',
+          },
+          interfaces: ['Node'],
+        });
+
+        createTypes(typeDef);
+      },
+    });
+  }
+};
