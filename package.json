@@ -5,7 +5,7 @@
   "author": "Alexander Feiglstorfer <af@storyblok.com>",
   "scripts": {
     "test": "jest",
-    "lint": "eslint src",
+    "lint": "eslint .",
     "format": "prettier --write 'src/**/*.js'"
   },
   "deprecated": false,

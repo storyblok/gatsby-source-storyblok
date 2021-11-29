@@ -1,11 +1,13 @@
 module.exports = {
   env: {
-    es2020: true,
     node: true,
+    commonjs: true,
+    es2021: true,
   },
   extends: 'eslint:recommended',
+  ignorePatterns: ['tests/*'],
   parserOptions: {
-    ecmaVersion: 11,
+    ecmaVersion: 12,
     sourceType: 'module',
   },
   rules: {},
