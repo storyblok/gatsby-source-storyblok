@@ -23,29 +23,27 @@ exports.sourceNodes = async function ({ actions }, options) {
       node: 'StoryblokEntry',
       params: getStoryParams(language, options),
       process: (item) => {
-        if (!options.dynamicContent) {
-          for (var prop in item.content) {
-            // eslint-disable-next-line no-prototype-builtins
-            if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
-              continue;
-            }
-            const objectType = Object.prototype.toString
-              .call(item.content[prop])
-              .replace('[object ', '')
-              .replace(']', '')
-              .toLowerCase();
+        for (var prop in item.content) {
+          // eslint-disable-next-line no-prototype-builtins
+          if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
+            continue;
+          }
+          const objectType = Object.prototype.toString
+            .call(item.content[prop])
+            .replace('[object ', '')
+            .replace(']', '')
+            .toLowerCase();
 
-            if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
-              continue;
-            }
-
-            const type = prop == 'component' ? '' : '_' + objectType;
-
-            item['field_' + prop + type] = item.content[prop];
+          if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
+            continue;
           }
 
-          item.content = stringify(item.content);
+          const type = prop == 'component' ? '' : '_' + objectType;
+
+          item['field_' + prop + type] = item.content[prop];
         }
+
+        item.content = stringify(item.content);
       },
     });
   }
