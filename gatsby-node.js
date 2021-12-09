@@ -2,8 +2,6 @@ const StoryblokClient = require('storyblok-js-client');
 const Sync = require('./src/sync');
 const getStoryParams = require('./src/getStoryParams');
 const stringify = require('json-stringify-safe');
-const index = require('deepdash/index');
-const get = require('lodash.get');
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
 exports.sourceNodes = async function ({ actions }, options) {
@@ -112,15 +110,13 @@ exports.onCreateNode = async (
   }
 
   if (node.internal.type === 'StoryblokEntry') {
-    let imagePaths = Object.keys(index(node.content)).filter((path) => path.includes('filename'));
-
-    if (imagePaths.length) {
+    const assetRegex = /(https:\/\/a\.storyblok\.com.+?(?:\.)(\w)*)/g;
+    let imagePaths = node.content.match(assetRegex);
+    if (imagePaths?.length) {
       imagePaths.forEach(async (imagePath) => {
-        const newPath = imagePath.replace('.filename', '');
-        const foundAsset = get(node.content, newPath);
         let fileNodeID;
 
-        const mediaDataCacheKey = `sb-${foundAsset.id}`;
+        const mediaDataCacheKey = `sb-${imagePath}`;
         const cacheMediaData = await getCache(mediaDataCacheKey);
         const isCached = cacheMediaData && node.cv === cacheMediaData.updatedAt;
 
@@ -128,14 +124,9 @@ exports.onCreateNode = async (
           fileNodeID = cacheMediaData.fileNodeID;
         }
 
-        if (!fileNodeID && foundAsset?.filename?.length) {
+        if (!fileNodeID && imagePath) {
           const fileNode = await createRemoteFileNode({
-            url: foundAsset.filename,
-            id: foundAsset.id,
-            alt: foundAsset.alt,
-            name: foundAsset.name,
-            title: foundAsset.title,
-            copyright: foundAsset.copyright,
+            url: imagePath,
             parentNodeId: node.id,
             createNode,
             createNodeId,
@@ -152,42 +143,5 @@ exports.onCreateNode = async (
         }
       });
     }
-  }
-};
-
-exports.createSchemaCustomization = async function ({ actions, schema }, options) {
-  if (!options.dynamicContent) {
-    return;
-  }
-
-  const { createNode, setPluginStatus, createTypes } = actions;
-  const client = new StoryblokClient(options);
-
-  Sync.init({
-    createNode,
-    setPluginStatus,
-    client,
-  });
-
-  const space = await Sync.getSpace();
-  const languages = options.languages ? options.languages : space.language_codes;
-  languages.push('');
-
-  for (const language of languages) {
-    await Sync.getAll('stories', {
-      node: 'StoryblokEntry',
-      params: getStoryParams(language, options),
-      process: () => {
-        const typeDef = schema.buildObjectType({
-          name: `StoryblokEntry`,
-          fields: {
-            content: 'JSON',
-          },
-          interfaces: ['Node'],
-        });
-
-        createTypes(typeDef);
-      },
-    });
   }
 };
