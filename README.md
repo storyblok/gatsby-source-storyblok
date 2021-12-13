@@ -20,11 +20,47 @@ module.exports = {
       options: {
         accessToken: 'YOUR_TOKEN',
         version: 'draft',
+        localAssets: true, // Optional parameter to download the images to use with Gatsby Image Plugin
         languages: ['de', 'at'] // Optional parameter. Omission will retrieve all languages by default.
       }
     }
   ]
 }
+```
+
+### With Gatsby's image
+
+You need to set the `localAssets` option to `true`. Here is an example of the usage:
+
+```
+import { graphql } from "gatsby"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
+
+function BlogPost({ data }) {
+  const image = getImage(data.file)
+  return (
+    <section>
+      <h2>{data.blogPost.title}</h2>
+      <GatsbyImage image={image} />
+    </section>
+  )
+}
+
+export const pageQuery = graphql`
+  query {
+    file(name: {eq: "demo"}) {
+      absolutePath
+      url
+      childImageSharp {
+         gatsbyImageData(
+          width: 200
+          placeholder: BLURRED
+          formats: [AUTO, WEBP, AVIF]
+        )
+      }
+    }
+  }
+`
 ```
 
 ### With Gatsby's createPages
