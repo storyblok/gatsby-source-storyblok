@@ -32,7 +32,7 @@ module.exports = {
 
 You need to set the `localAssets` option to `true`. Here is an example of the usage:
 
-```
+```JavaScript
 import { graphql } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
