@@ -74,7 +74,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 
 export default function StoryblokEntry ({ data }) {
-  const story = data.storyblokEntry
+  let story = data.storyblokEntry
 
   return (
     <div>{story.name}</div>
@@ -152,14 +152,14 @@ import React from 'react'
 import { graphql } from 'gatsby'
 
 export default function StoryblokEntry({ data }) {
-  const story = data.storyblokEntry
+  let story = data.storyblokEntry
 
   return <div>{story.name}</div>
 }
 
 export const query = graphql`
-  query ($slug: String!) {
-    storyblokEntry(slug: { eq: $slug }) {
+  query ($full_slug: String!) {
+    storyblokEntry(full_slug: { eq: $full_slug }) {
       id
       name
       full_slug
@@ -170,63 +170,33 @@ export const query = graphql`
 
 ## Rendering Storyblok content
 
-To source Storyblok's content add `content` to your GraphQL query. By using a switch statement you can make decisions about how to render each of the bloks.
+To source Storyblok's content add `content` to your GraphQL query. By importing `DynamicComponent`, you can render components dynamically. `sbEditable` function lets you to make your components editable in [storyblok.com](https://www.storyblok.com/)
+
+For more info regarding `sbEditable` function see the @storyblok/storyblok-editable README: [@storyblok/storyblok-editable](https://github.com/storyblok/storyblok-editable)
 
 ```js
-import React, { Fragment } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
-
-const getBlok = (blok) => {
-  const { component } = blok
-
-  switch (component) {
-    case 'teaser':
-      return (
-        <Fragment>
-          <h2>{blok.headline}</h2>
-          <pre>{JSON.stringify(blok, null, 2)}</pre>
-        </Fragment>
-      )
-
-    case 'grid':
-      return (
-        <Fragment>
-          {blok.columns.map((column, index) => {
-            return <pre key={index}>{JSON.stringify(column, null, 2)}</pre>
-          })}
-        </Fragment>
-      )
-
-    case 'feature':
-      return (
-        <Fragment>
-          <h2>{blok.name}</h2>
-          <pre>{JSON.stringify(blok, null, 2)}</pre>
-        </Fragment>
-      )
-
-    default:
-      return null
-  }
-}
+import { sbEditable } from "@storyblok/storyblok-editable"
+import DynamicComponent from "../components/dynamicComponent"
 
 export default function StoryblokEntry({ data }) {
-  const story = data.storyblokEntry
-  const { title, body } = JSON.parse(story.content)
+  let story = data.storyblokEntry
+
+  const components = story.content.body.map(blok => {
+    return (<DynamicComponent blok={blok} key={blok._uid} />)
+  })
 
   return (
-    <div>
-      <h1>{title}</h1>
-      {body.map((blok, index) => {
-        return <Fragment key={index}>{getBlok(blok)}</Fragment>
-      })}
+    <div {...sbEditable(story.content)}>
+      {components}
     </div>
   )
 }
 
 export const query = graphql`
-  query ($slug: String!) {
-    storyblokEntry(slug: { eq: $slug }) {
+  query ($full_slug: String!) {
+    storyblokEntry(full_slug: { eq: $full_slug }) {
       id
       name
       full_slug
@@ -235,7 +205,6 @@ export const query = graphql`
   }
 `
 ```
-
 
 ## The options object in details
 
