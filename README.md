@@ -141,7 +141,7 @@ For more info regarding The File System Routes API see the Gatsby docs: [docs/re
 ```
 |-- src
    |-- pages
-      |-- {storyblokEntry.slug}.js
+      |-- {storyblokEntry.full_slug}.js
 ```
 
 
