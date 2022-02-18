@@ -22,7 +22,6 @@ const getStoryParams = function (language, options = {}, contentType = '') {
       .map((relation) => `${contentType}.${relation}`)
       .join(',');
   }
-  console.log(params);
 
   if (options.version) {
     params.version = options.version;
