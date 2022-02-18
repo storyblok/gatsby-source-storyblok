@@ -4,6 +4,14 @@ const getStoryParams = require('./src/getStoryParams');
 const stringify = require('json-stringify-safe');
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 
+function toPascalCase(text) {
+  return text.replace(/(^\w|-\w)/g, clearAndUpper);
+}
+
+function clearAndUpper(text) {
+  return text.replace(/-/, '').toUpperCase();
+}
+
 exports.sourceNodes = async function ({ actions }, options) {
   const { createNode, setPluginStatus } = actions;
   const client = new StoryblokClient(options);
@@ -15,38 +23,54 @@ exports.sourceNodes = async function ({ actions }, options) {
   });
 
   const space = await Sync.getSpace();
-  const languages = options.languages ? options.languages : space.language_codes;
-  languages.push('');
+  const languages = options.languages || space.language_codes;
+  await Promise.all(
+    languages
+      .map((language) => {
+        return options.contentTypes.map((contentType) => {
+          return Sync.getAll('stories', {
+            node: `Storyblok${toPascalCase(contentType)}`,
+            params: getStoryParams(language, options, contentType),
+            process: (item) => {
+              for (var prop in item.content) {
+                // eslint-disable-next-line no-prototype-builtins
+                if (
+                  !item.content.hasOwnProperty(prop) ||
+                  ['_editable', '_uid'].indexOf(prop) > -1
+                ) {
+                  continue;
+                }
+                const objectType = Object.prototype.toString
+                  .call(item.content[prop])
+                  .replace('[object ', '')
+                  .replace(']', '')
+                  .toLowerCase();
 
-  for (const language of languages) {
-    await Sync.getAll('stories', {
-      node: 'StoryblokEntry',
-      params: getStoryParams(language, options),
-      process: (item) => {
-        for (var prop in item.content) {
-          // eslint-disable-next-line no-prototype-builtins
-          if (!item.content.hasOwnProperty(prop) || ['_editable', '_uid'].indexOf(prop) > -1) {
-            continue;
-          }
-          const objectType = Object.prototype.toString
-            .call(item.content[prop])
-            .replace('[object ', '')
-            .replace(']', '')
-            .toLowerCase();
+                if (
+                  options.filterProperties &&
+                  options.filterProperties[contentType] &&
+                  options.filterProperties[contentType].includes(prop)
+                ) {
+                  item[prop] = item.content[prop];
+                  continue;
+                }
 
-          if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
-            continue;
-          }
+                if (['number', 'boolean', 'string'].indexOf(objectType) === -1) {
+                  continue;
+                }
 
-          const type = prop == 'component' ? '' : '_' + objectType;
+                const type = prop == 'component' ? '' : '_' + objectType;
 
-          item['field_' + prop + type] = item.content[prop];
-        }
+                item['field_' + prop + type] = item.content[prop];
+              }
 
-        item.content = stringify(item.content);
-      },
-    });
-  }
+              item.content = stringify(item.content);
+            },
+          });
+        });
+      })
+      .flat()
+  );
 
   await Sync.getAll('tags', {
     node: 'StoryblokTag',

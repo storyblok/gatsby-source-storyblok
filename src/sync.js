@@ -78,27 +78,31 @@ module.exports = {
   },
 
   async getAll(type, options) {
-    let page = 1;
-    let res = await this.getPage(type, page, options);
-    let all =
-      res.data[type].constructor === Object ? Object.values(res.data[type]) : res.data[type];
-    let lastPage = Math.ceil(res.total / 25);
+    try {
+      let page = 1;
+      let res = await this.getPage(type, page, options);
+      const all =
+        res.data[type].constructor === Object ? Object.values(res.data[type]) : res.data[type];
+      const lastPage = Math.ceil(res.total / 25);
 
-    while (page < lastPage) {
-      page++;
-      res = await this.getPage(type, page, options);
-      res.data[type].forEach((item) => {
-        all.push(item);
-      });
-    }
-
-    all.forEach((item) => {
-      if (options.process) {
-        options.process(item);
+      while (page < lastPage) {
+        page++;
+        res = await this.getPage(type, page, options);
+        res.data[type].forEach((item) => {
+          all.push(item);
+        });
       }
-      this.createNode(options.node, item);
-    });
 
-    return all;
+      all.forEach((item) => {
+        if (options.process) {
+          options.process(item);
+        }
+        this.createNode(options.node, item);
+      });
+
+      return all;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
