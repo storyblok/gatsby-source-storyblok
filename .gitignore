@@ -4,3 +4,7 @@ node_modules
 .eslintcache
 yarn-error.log
 yarn.lock
+/__tests__
+/yarn.lock
+/*.js
+!index.js

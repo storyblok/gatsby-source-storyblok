@@ -1,0 +1,1 @@
+export { getImageId } from './utils';
