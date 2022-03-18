@@ -46,4 +46,16 @@ describe('getStoryParams() function', () => {
       resolve_relations: 'page.author,page.categories'
     })
   })
+
+  test('with a language and a version and a from_release options', () => {
+    const options = {
+      version: 'draft',
+      fromRelease: '100'
+    }
+    expect(getStoryParams('en', options)).toEqual({
+      language: 'en',
+      version: 'draft',
+      from_release: '100'
+    })
+  })
 })
