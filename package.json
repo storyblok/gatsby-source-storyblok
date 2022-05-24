@@ -1,54 +1,65 @@
 {
-  "name": "gatsby-source-storyblok",
-  "description": "Gatsby source plugin for building websites using the Storyblok headless CMS as a data source.",
-  "version": "0.0.0-development",
-  "author": "Alexander Feiglstorfer <af@storyblok.com>",
-  "scripts": {
-    "test": "jest",
-    "lint": "eslint .",
-    "format": "prettier --write 'src/**/*.js'"
-  },
-  "deprecated": false,
-  "private": false,
-  "keywords": [
-    "gatsby",
-    "gatsby-plugin",
-    "gatsby-source-plugin",
-    "storyblok",
-    "headless-cms"
+  "name": "gatsby-source-storyblok-workspace",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": [
+    "./lib",
+    "./playground",
+    "./playground-test"
   ],
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "gatsby-source-filesystem": "^4.2.0",
-    "json-stringify-safe": "^5.0.1",
-    "storyblok-js-client": "^4.1.5"
+  "scripts": {
+    "dev": "npm run dev --workspace=lib & npm run demo",
+    "demo": "npm run develop --workspace=playground",
+    "build": "npm run build --workspace=lib",
+    "test:unit": "npm run test:unit --workspace=lib",
+    "test:e2e": "npm run test:e2e --workspace=lib",
+    "test:e2e-watch": "npm run test:e2e-watch --workspace=lib",
+    "prepare": "husky install"
   },
   "devDependencies": {
-    "axios": "^0.21.1",
-    "babel-cli": "^6.26.0",
-    "eslint": "7.13.0",
-    "husky": "4.3.0",
-    "jest": "^27.3.1",
-    "lint-staged": "^12.1.2",
-    "lodash.has": "^4.5.2",
-    "prettier": "2.1.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.30.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.1",
+    "prettier": "^2.6.2"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --cache --fix",
+    "*.{js,jsx,css}": [
+      "prettier --write",
+      "eslint"
+    ],
+    "*.md": [
       "prettier --write"
     ]
   },
-  "peerDependencies": {
-    "gatsby": "^2.0.0 || ^3.0.0 || ^4.0.0",
-    "storyblok-editable": "^1.1.0"
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
-  "homepage": "https://www.storyblok.com",
-  "repository": "https://github.com/storyblok/gatsby-source-storyblok"
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "prettier"
+    ],
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "ignorePatterns": "dist/",
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2022
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": false
+  }
 }
