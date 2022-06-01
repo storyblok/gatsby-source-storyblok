@@ -136,7 +136,7 @@ export const query = graphql`
 
 #### 2. Listen to Storyblok Visual Editor events
 
-Use `useStoryblok` to get the new story every time is triggered a `change` event from the Visual Editor. You need to pass the `originalStory` as a first param. `bridgeOptions` (second param) is an optional param if you want to set the options for bridge by yourself:
+Use `useStoryblokState` to get the new story every time is triggered a `change` event from the Visual Editor. You need to pass the `originalStory` as a first param. `bridgeOptions` (second param) is an optional param if you want to set the options for bridge by yourself:
 
 ```js
 import { StoryblokComponent, useStoryblokState } from "gatsby-source-storyblok"
@@ -190,11 +190,9 @@ import { storyblokEditable } from "gatsby-source-storyblok";
 
 const Feature = ({ blok }) => {
   return (
-    <div {...storyblokEditable(blok)} key={blok._uid} data-test="feature">
-      <div>
-        <div>{blok.name}</div>
-        <p>{blok.description}</p>
-      </div>
+    <div {...storyblokEditable(blok)} key={blok._uid}>
+      <div>{blok.name}</div>
+      <p>{blok.description}</p>
     </div>
   );
 };
