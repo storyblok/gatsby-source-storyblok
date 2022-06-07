@@ -294,7 +294,6 @@ function BlogPost({ data }) {
   const image = getImage(data.file)
   return (
     <section>
-      <h2>{data.blogPost.title}</h2>
       <GatsbyImage image={image} />
     </section>
   )

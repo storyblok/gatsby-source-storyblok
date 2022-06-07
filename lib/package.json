@@ -1,10 +1,5 @@
 {
   "name": "gatsby-source-storyblok",
-  "contributors": [
-    {
-      "name": "Alexander Feiglstorfer <delooks@gmail.com>"
-    }
-  ],
   "version": "4.0.0",
   "description": "SDK to integrate Storyblok into your project using Gatsby.",
   "main": "./dist/gatsby-source-storyblok.js",
