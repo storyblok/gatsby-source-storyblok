@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@storyblok/react": "^1.0.5",
-    "gatsby-source-filesystem": "^4.0.0",
+    "gatsby-source-filesystem": "^4.18.0",
     "json-stringify-safe": "^5.0.1",
     "storyblok-js-client": "^4.5.2"
   },
