@@ -452,6 +452,7 @@ export const query = graphql`
 * `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['article.related_articles', 'article.author'].
 * `includeLinks`: If 'true' you can query links by allStoryblokLinkEntry. The links query lets you create a dynamic navigation tree as it includes also content folders.
 * `languages`: An array of strings that will be used in languages request instead of languages in space settings. Use it to only load the languages that you want to.
+* `disablePagination`: If 'true' the data will be fetched with single api request
 
 #### How to query all Content Entries
 
