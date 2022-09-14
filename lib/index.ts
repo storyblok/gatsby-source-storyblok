@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { useStoryblokBridge as useSbBridge } from "@storyblok/react";
-export { useStoryblokBridge, storyblokInit, apiPlugin, StoryblokComponent, storyblokEditable, useStoryblokApi, getStoryblokApi } from "@storyblok/react";
+export {
+  useStoryblokBridge,
+  storyblokInit,
+  apiPlugin,
+  StoryblokComponent,
+  storyblokEditable,
+  useStoryblokApi,
+  getStoryblokApi,
+  renderRichText,
+  RichTextSchema
+} from "@storyblok/react";
+
 import type {
   SbGatsbyStory,
   StoryblokBridgeConfigV2

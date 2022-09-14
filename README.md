@@ -42,7 +42,7 @@ npm install gatsby-source-storyblok
 
 ### Initialization
 
-Register the plugin on your application and add the [access token](https://www.storyblok.com/docs/api/content-delivery#topics/authentication?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) of your Storyblok space. You can also add the `apiPlugin` in case that you want to use the Storyblok API Client:
+Register the plugin on your application and add the [access token](https://www.storyblok.com/docs/api/content-delivery#topics/authentication?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) of your Storyblok space. You can also add the `apiPlugin` in case that you want to use the Storyblok API Client: For Spaces created under US region, you should pass the region like { apiOptions: { region: 'us' } }. If your space is under EU, no further configuration is required.
 
 > You need to declare the plugin use and its options in `gatsby-config.js`
 
@@ -72,7 +72,9 @@ const sbConfig = configuration.plugins.find((item) => item.resolve === 'gatsby-s
 storyblokInit({
   accessToken: sbConfig.options.accessToken,
   // bridge: false,
-  // apiOptions: {  },
+  apiOptions: {
+    region: "us", // Pass this key/value if your space was created under US region
+  },
   use: [apiPlugin],
   components: {
     teaser: Teaser,
@@ -277,6 +279,51 @@ const sbBridge = new window.StoryblokBridge(options);
 
 sbBridge.on(["input", "published", "change"], (event) => {
   // ...
+});
+```
+
+#### Rendering Rich Text
+You can easily render rich text by using the `renderRichText` function that comes with `gatsby-source-storyblok`:
+```js
+import { renderRichText } from "gatsby-source-storyblok";
+const renderedRichText = renderRichText(blok.richtext);
+```
+You can set a **custom Schema and component resolver globally** at init time by using the `richText` init option:
+```js
+import { RichTextSchema, storyblokInit } from "gatsby-source-storyblok";
+import cloneDeep from "clone-deep";
+const mySchema = cloneDeep(RichTextSchema); // you can make a copy of the default RichTextSchema
+// ... and edit the nodes and marks, or add your own.
+// Check the base RichTextSchema source here https://github.com/storyblok/storyblok-js-client/blob/master/source/schema.js
+storyblokInit({
+  accessToken: "<your-token>",
+  richText: {
+    schema: mySchema,
+    resolver: (component, blok) => {
+      switch (component) {
+        case "my-custom-component":
+          return `<div class="my-component-class">${blok.text}</div>`;
+        default:
+          return "Resolver not defined";
+      }
+    },
+  },
+});
+```
+You can also set a **custom Schema and component resolver only once** by passing the options as the second parameter to `renderRichText` function:
+```js
+import { renderRichText } from "gatsby-source-storyblok";
+renderRichText(blok.richTextField, {
+  schema: mySchema,
+  resolver: (component, blok) => {
+    switch (component) {
+      case "my-custom-component":
+        return `<div class="my-component-class">${blok.text}</div>`;
+        break;
+      default:
+        return `Component ${component} not found`;
+    }
+  },
 });
 ```
 
