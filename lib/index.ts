@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStoryblokBridge as useSbBridge } from "@storyblok/react";
+import { registerStoryblokBridge } from "@storyblok/react";
 export {
   useStoryblokBridge,
   storyblokInit,
@@ -23,7 +23,11 @@ export function useStoryblokState(originalStory: SbGatsbyStory,
 
   let [story, setStory] = useState(originalStory);
   useEffect(() => {
-    useSbBridge(story.internalId, (newStory: SbGatsbyStory) => setStory(newStory), bridgeOptions);
+    registerStoryblokBridge(
+      story.internalId,
+      (newStory: SbGatsbyStory) => setStory(newStory),
+      bridgeOptions
+    );
   }, []);
 
   return story;
