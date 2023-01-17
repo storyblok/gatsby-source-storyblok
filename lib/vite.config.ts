@@ -20,7 +20,7 @@ export default defineConfig(() => {
       },
     },
     test: {
-      setupFiles: ["./tests/setup.js"],
+      setupFiles: ["./__tests__/setup.js"],
     },
   };
 });
