@@ -40,6 +40,13 @@ npm install gatsby-source-storyblok
 // yarn add gatsby-source-storyblok
 ```
 
+#### Compatibility
+
+| Version to install                                                                                                              | Support                                              |
+| ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| Latest `gatsby-source-storyblok`                                                                                                    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented.                           |
+| [Version 4](https://github.com/storyblok/gatsby-source-storyblok/tree/v4.2.1) `gatsby-source-storyblok@4`                               | Node 14 and lower Node with no Fetch API support
+
 ### Initialization
 
 Register the plugin on your application and add the [access token](https://www.storyblok.com/docs/api/content-delivery#topics/authentication?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) of your Storyblok space. You can also add the `apiPlugin` in case that you want to use the Storyblok API Client: For Spaces created under US region, you should pass the region like { apiOptions: { region: 'us' } }. If your space is under EU, no further configuration is required.
