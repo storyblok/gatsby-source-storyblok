@@ -19,8 +19,5 @@ export default defineConfig(() => {
         },
       },
     },
-    test: {
-      setupFiles: ["./setup.js"],
-    },
   };
 });
