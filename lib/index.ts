@@ -9,6 +9,7 @@ export {
   useStoryblokApi,
   getStoryblokApi,
   renderRichText,
+  RichTextSchema
 } from "@storyblok/react";
 
 import type {
