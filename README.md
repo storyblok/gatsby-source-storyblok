@@ -45,7 +45,7 @@ npm install gatsby-source-storyblok
 | Version to install                                                                                                              | Support                                              |
 | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | Latest `gatsby-source-storyblok`                                                                                                    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. Supports Gatsby 5 (React Server Components)                          |
-| [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5.0.0) `gatsby-source-storyblok@4`                               | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented.                          |
+| [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5.0.0) `gatsby-source-storyblok@5`                               | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented.                          |
 | [Version 4](https://github.com/storyblok/gatsby-source-storyblok/tree/v4.2.1) `gatsby-source-storyblok@4`                               | Node 14 and lower Node with no Fetch API support
 
 ### Initialization
