@@ -49,7 +49,7 @@ npm install gatsby-source-storyblok
 
 ### Initialization
 
-Register the plugin on your application and add the [access token](https://www.storyblok.com/docs/api/content-delivery#topics/authentication?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) of your Storyblok space. You can also add the `apiPlugin` in case that you want to use the Storyblok API Client: For Spaces created under US region, you should pass the region like { apiOptions: { region: 'us' } }. If your space is under EU, no further configuration is required.
+Register the plugin on your application and add the [access token](https://www.storyblok.com/docs/api/content-delivery#topics/authentication?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) of your Storyblok space. You can also add the `apiPlugin` in case that you want to use the Storyblok API Client.
 
 > You need to declare the plugin use and its options in `gatsby-config.js`
 
@@ -96,6 +96,24 @@ storyblokInit({
 That's it! All the features are enabled for you: the _Api Client_ for interacting with [Storyblok CDN API](https://www.storyblok.com/docs/api/content-delivery#topics/introduction?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok), and _Storyblok Bridge_ for [real-time visual editing experience](https://www.storyblok.com/docs/guide/essentials/visual-editor?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok).
 
 > You can enable/disable some of these features if you don't need them, so you save some KB. Please read the "Features and API" section
+
+#### Region parameter
+
+Possible values:
+- `eu` (default): For spaces created in EU
+- `us` : For spaces created in the US
+- `cn` : For spaces created in China
+
+Full example for a space created in the US:
+
+```javascript
+storyblokInit({
+  accessToken: "<your-access-token>",
+  apiOptions: {
+    region: 'us'
+  },
+});
+```
 
 ### Getting Started
 
@@ -667,6 +685,10 @@ allStoryblokLinkEntry {
   }
 }
 ```
+
+## The Storyblok JavaScript SDK Ecosystem
+
+![A visual representation of the Storyblok JavaScript SDK Ecosystem](https://a.storyblok.com/f/88751/2400x1350/be4a4a4180/sdk-ecosystem.png/m/1200x0)
 
 ## 🔗 Related Links
 
