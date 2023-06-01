@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react"
 import { graphql } from "gatsby"
 
@@ -23,7 +24,7 @@ export default IndexPage
 
 export const query = graphql`
   query HomeQuery {
-    storyblokEntry(full_slug: { eq: "gatsby/" }) {
+    storyblokEntry(full_slug: { eq: "gatsby/playground-v5" }) {
       content
       name
       full_slug

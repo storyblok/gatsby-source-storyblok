@@ -16,7 +16,7 @@
   "display": "Recommended",
   "include": [
     "./index.ts",
-    "./types.ts",
+    "./types.ts"
   ],
   "exclude": [
     "node_modules"
