@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-storyblok",
-  "version": "4.0.0",
+  "version": "1.0.0",
   "description": "SDK to integrate Storyblok into your project using Gatsby.",
   "main": "./dist/gatsby-source-storyblok.js",
   "module": "./dist/gatsby-source-storyblok.mjs",
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.22.4",
-    "@cypress/react": "^7.0.3",
     "@cypress/vite-dev-server": "^5.0.5",
     "@tsconfig/recommended": "^1.0.2",
     "@vitejs/plugin-react": "^4.0.0",
