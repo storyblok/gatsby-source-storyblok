@@ -4,12 +4,13 @@
  *
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
-
-import * as React from "react"
+"use client";
+import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 import { storyblokInit, apiPlugin } from "gatsby-source-storyblok"
 import Teaser from './Teaser'
 import Grid from './Grid'
+import Page from './Page'
 import Feature from './Feature'
 import configuration from '../../gatsby-config'
 
@@ -21,7 +22,8 @@ storyblokInit({
   components: {
     teaser: Teaser,
     grid: Grid,
-    feature: Feature
+    feature: Feature,
+    page: Page
   }
 });
 
