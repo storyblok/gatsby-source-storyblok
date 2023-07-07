@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStoryblokBridge as useSbBridge } from "@storyblok/react";
+import { useStoryblokBridge as useSbBridge } from "@storyblok/react/rsc";
 export {
   useStoryblokBridge,
   storyblokInit,
@@ -9,24 +9,13 @@ export {
   useStoryblokApi,
   getStoryblokApi,
   renderRichText,
-} from "@storyblok/react";
+} from "@storyblok/react/rsc";
+export { default as StoryblokStory } from "@storyblok/react/story";
 
 import type {
   SbGatsbyStory,
   StoryblokBridgeConfigV2
 } from './types'
-
-export function useStoryblokState(originalStory: SbGatsbyStory,
-  bridgeOptions: StoryblokBridgeConfigV2 = {}) {
-  if (typeof originalStory.content === "string") originalStory.content = JSON.parse(originalStory.content);
-
-  let [story, setStory] = useState(originalStory);
-  useEffect(() => {
-    useSbBridge(story.internalId, (newStory: SbGatsbyStory) => setStory(newStory), bridgeOptions);
-  }, []);
-
-  return story;
-}
 
 // Reexport all types so users can have access to them
 export * from "./types";

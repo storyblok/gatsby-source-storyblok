@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react"
 import { graphql } from "gatsby"
 
@@ -6,8 +7,7 @@ import { StoryblokComponent, storyblokEditable, useStoryblokState } from "gatsby
 import Layout from "../components/layout"
 
 const IndexPage = ({ data }) => {
-  let story = data.storyblokEntry
-  story = useStoryblokState(story)
+  let story = useStoryblokState(data.storyblokEntry)
 
   const components = story.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
 

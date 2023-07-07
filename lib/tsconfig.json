@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "isolatedModules": true,
     "target": "ESNext",
     "strict": false,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,7 +17,7 @@
   "display": "Recommended",
   "include": [
     "./index.ts",
-    "./types.ts",
+    "./types.ts"
   ],
   "exclude": [
     "node_modules"

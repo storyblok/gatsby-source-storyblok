@@ -1,20 +1,16 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 
-import { StoryblokComponent, storyblokEditable, useStoryblokState } from "gatsby-source-storyblok"
+import { StoryblokStory } from "gatsby-source-storyblok"
 
 import Layout from "../components/layout"
 
 const IndexPage = ({ data }) => {
-  let story = useStoryblokState(data.storyblokEntry)
-  const components = story.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
+  if (typeof data.storyblokEntry.content === "string") data.storyblokEntry.content = JSON.parse(data.storyblokEntry.content);
 
   return (
     <Layout>
-      <div {...storyblokEditable(story.content)}>
-        <h1>{story.name}</h1>
-        {components}
-      </div>
+      <StoryblokStory story={data.storyblokEntry} />
     </Layout>
   )
 }
@@ -23,7 +19,7 @@ export default IndexPage
 
 export const query = graphql`
   query HomeQuery {
-    storyblokEntry(full_slug: { eq: "gatsby/" }) {
+    storyblokEntry(full_slug: { eq: "gatsby/playground-v5" }) {
       content
       name
       full_slug
