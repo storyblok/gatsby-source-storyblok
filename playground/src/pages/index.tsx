@@ -1,7 +1,7 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 
-import { StoryblokComponent, storyblokEditable, useStoryblokState, StoryblokStory } from "gatsby-source-storyblok"
+import { StoryblokStory } from "gatsby-source-storyblok"
 
 import Layout from "../components/layout"
 

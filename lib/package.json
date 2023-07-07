@@ -17,7 +17,7 @@
     "test:unit": "jest __tests__",
     "test:e2e": "start-server-and-test cy:playground http-get://localhost:8000/ cy:run",
     "test:e2e-watch": "start-server-and-test cy:playground http-get://localhost:8000/ cy:open",
-    "cy:playground": "npm run develop --prefix ../playground-test",
+    "cy:playground": "npm run develop --prefix ../playground",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "prepublishOnly": "npm run build && cp ../README.md ./"
