@@ -45,7 +45,7 @@ npm install gatsby-source-storyblok
 | Version to install                                                                                                              | Support                                              |
 | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | Latest `gatsby-source-storyblok`                                                                                                    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. Supports Gatsby 5 (React Server Components)                            |
-| [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5.0.0) `gatsby-source-storyblok@5 `                               | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented.
+| [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) `gatsby-source-storyblok@5 `                               | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. (Go to [v5 branch](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) for Gatsby 4 and lower Gatsby version support)
 | [Version 4](https://github.com/storyblok/gatsby-source-storyblok/tree/v4.2.1) `gatsby-source-storyblok@4`                               | Node 14 and lower Node with no Fetch API support
 
 ### Initialization
@@ -54,25 +54,34 @@ Register the plugin on your application and add the [access token](https://www.s
 
 > You need to declare the plugin use and its options in `gatsby-config.js`
 
+`gatsby-config.ts`
+
 ```JavaScript
-module.exports = {
+import type { GatsbyConfig } from "gatsby"
+
+const config: GatsbyConfig = {
+  flags: {
+    PARTIAL_HYDRATION: true // Required for Partial Hydration (RSC)
+  },
+  graphqlTypegen: true,
   plugins: [
     {
       resolve: 'gatsby-source-storyblok',
       options: {
-        accessToken: 'YOUR_TOKEN',
+        accessToken: '<your-access-token>',
         version: 'draft',
         localAssets: true, // Optional parameter to download the images to use with Gatsby Image Plugin
         languages: ['de', 'at'] // Optional parameter. Omission will retrieve all languages by default.
       }
-    }
-  ]
+    },
+  ],
 }
 ```
 
-`src/components/layout.js`
+`src/components/layout.jsx`
 
 ```JavaScript
+"use client" // Required for Partial Hydration, client components (RSC)
 import configuration from '../../gatsby-config'
 
 const sbConfig = configuration.plugins.find((item) => item.resolve === 'gatsby-source-storyblok')
@@ -87,14 +96,15 @@ storyblokInit({
   components: {
     teaser: Teaser,
     grid: Grid,
-    feature: Feature
+    feature: Feature,
+    page: Page
   }
 });
 ```
 
 > Add all your components to the components object in the `storyblokInit` function.
 
-That's it! All the features are enabled for you: the _Api Client_ for interacting with [Storyblok CDN API](https://www.storyblok.com/docs/api/content-delivery#topics/introduction?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok), and _Storyblok Bridge_ for [real-time visual editing experience](https://www.storyblok.com/docs/guide/essentials/visual-editor?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok).
+That's it! All the features are enabled for you: the _API Client_ for interacting with [Storyblok CDN API](https://www.storyblok.com/docs/api/content-delivery#topics/introduction?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok), and _Storyblok Bridge_ for [real-time visual editing experience](https://www.storyblok.com/docs/guide/essentials/visual-editor?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok).
 
 > You can enable/disable some of these features if you don't need them, so you save some KB. Please read the "Features and API" section
 
@@ -120,30 +130,29 @@ storyblokInit({
 
 `gatsby-source-storyblok` does three actions when you initialize it:
 
-- Provides a `useStoryblokState` custom hook in your app, that parses story content JSON into the object.
+- Provides a `StoryblokStory` that includes `useStoryblokState` that receives a story object.
 - Loads [Storyblok Bridge](https://www.storyblok.com/docs/Guides/storyblok-latest-js?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) for real-time visual updates.
 - Provides a `storyblokEditable` function to link editable components to the Storyblok Visual Editor.
 
-#### 1. Fetching Content
+> [gatsby-source-storyblok v5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) and lower had `useStoryblokState` that parsed story content JSON into the object. Use `StoryblokStory` instead to handle the Visual Editor live events when editing story.
+
+#### 1. Fetching Content & Listen to Storyblok Visual Editor events
 
 Query data from GraphQL:
 
-`src/pages/index.js`
+`src/pages/index.tsx`
 
 ```js
-import { useStoryblokState } from "gatsby-source-storyblok"
+import { StoryblokStory } from "gatsby-source-storyblok"
 
 import Layout from "../components/layout"
 
 const IndexPage = ({ data }) => {
-  let story = data.storyblokEntry
-  story = useStoryblokState(story)
+  if (typeof data.storyblokEntry.content === "string") data.storyblokEntry.content = JSON.parse(data.storyblokEntry.content);
 
   return (
     <Layout>
-      <div>
-        <h1>{story.name}</h1>
-      </div>
+      <StoryblokStory story={data.storyblokEntry} />
     </Layout>
   )
 }
@@ -162,56 +171,31 @@ export const query = graphql`
 
 > Note: if you don't use `apiPlugin`, you can use your prefered method or function to fetch your data.
 
-#### 2. Listen to Storyblok Visual Editor events
+Use `StoryblokStory` to get the new story every time is triggered a `change` event from the Visual Editor.
 
-Use `useStoryblokState` to get the new story every time is triggered a `change` event from the Visual Editor. You need to pass the `originalStory` as a first param. `bridgeOptions` (second param) is an optional param if you want to set the options for bridge by yourself:
+#### 2. Link your components to Storyblok Visual Editor
 
-```js
-import { StoryblokComponent, useStoryblokState } from "gatsby-source-storyblok"
-
-import Layout from "../components/layout"
-
-const IndexPage = ({ data }) => {
-  let story = data.storyblokEntry
-  story = useStoryblokState(story)
-
-  const components = story.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
-
-  return (
-    <Layout>
-      <div>
-        <h1>{story.name}</h1>
-        {components}
-      </div>
-    </Layout>
-  )
-}
-
-export default IndexPage
-
-export const query = graphql`
-  query HomeQuery {
-    storyblokEntry(full_slug: { eq: "home" }) {
-      content
-      name
-      full_slug
-      internalId
-    }
-  }
-`
-```
-
-You can pass Bridge options as a third parameter as well:
-
-```js
-useStoryblok(story.internalId, (newStory) => setStory(newStory), {
-  resolveRelations: ["Article.author"],
-});
-```
-
-#### 3. Link your components to Storyblok Visual Editor
+`StoryblokStory` keeps the state for thet story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically.
 
 For every component you've defined in your Storyblok space, call the `storyblokEditable` function with the blok content:
+
+`src/components/Page.tsx`
+
+```js
+import { storyblokEditable, StoryblokComponent } from "gatsby-source-storyblok";
+
+const Page = ({ blok }) => (
+  <main {...storyblokEditable(blok)}>
+    {blok.body.map((nestedBlok) => (
+      <StoryblokComponent blok={nestedBlok} key={nestedBlok._uid} />
+    ))}
+  </main>
+);
+
+export default Page;
+```
+
+`src/components/Feature.jsx`
 
 ```js
 import { storyblokEditable } from "gatsby-source-storyblok";
@@ -230,41 +214,7 @@ export default Feature;
 
 Where `blok` is the actual blok data coming from [Storblok's Content Delivery API](https://www.storyblok.com/docs/api/content-delivery?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok).
 
-As an example, you can check in our [Gatsby.js example demo]() how we use APIs provided from React SDK to combine with Gatsby.js projects.
-
-```js
-import { StoryblokComponent, storyblokEditable, useStoryblokState } from "gatsby-source-storyblok"
-
-import Layout from "../components/layout"
-
-const IndexPage = ({ data }) => {
-  let story = data.storyblokEntry
-  story = useStoryblokState(story)
-
-  const components = story.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
-
-  return (
-    <Layout>
-      <div {...storyblokEditable(story.content)}>
-        {components}
-      </div>
-    </Layout>
-  )
-}
-
-export default IndexPage
-
-export const query = graphql`
-  query HomeQuery {
-    storyblokEntry(full_slug: { eq: "home" }) {
-      content
-      name
-      full_slug
-      internalId
-    }
-  }
-`
-```
+As an example, you can check in our [Gatsby.js example demo](https://github.com/storyblok/gatsby-source-storyblok/tree/master/playground) how we use APIs provided from React SDK to combine with Gatsby.js projects.
 
 ### Features and API
 
@@ -354,6 +304,37 @@ renderRichText(blok.richTextField, {
 ```
 
 ### Gatsby feature references
+
+### Prtial Hydration (RSC)
+To enable Partial Hydration, you need to set the `PARTIAL_HYDRATION` flag to `true` in `gatsby-config` file. Here is an example of the usage:
+
+```js
+module.exports = {
+  flags: {
+    PARTIAL_HYDRATION: true
+  }
+}
+
+```
+
+When enabling Partial Hydration, all components act as server component by default. For more details such as benefits in terms of performance, please refer to the [Gatsby docs](https://www.gatsbyjs.com/docs/how-to/performance/partial-hydration/).
+
+To define a component to act as a client component, use `"use client"` directive in the first line of the code. Here is an example of the usage:
+
+`layout.jsx`
+
+```js
+"use client" // Required for Partial Hydration, client components (RSC)
+import configuration from '../../gatsby-config'
+
+const sbConfig = configuration.plugins.find((item) => item.resolve === 'gatsby-source-storyblok')
+
+storyblokInit({
+  // ...
+});
+```
+
+> Partial Hydration is a Beta feature. For limitations, see Gatsby documentation: [Partial Hydration, Limitations](https://www.gatsbyjs.com/docs/how-to/performance/partial-hydration/#limitations)
 
 #### With Gatsby's image
 
