@@ -44,7 +44,7 @@ npm install gatsby-source-storyblok
 
 | Version to install                                                                                                              | Support                                              |
 | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Latest `gatsby-source-storyblok`                                                                                                    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. Supports Gatsby 5 (React Server Components)                            |
+| Latest >v6 `gatsby-source-storyblok`                                                                                                    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. Supports Gatsby 5 (React Server Components)                            |
 | [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) `gatsby-source-storyblok@5 `                               | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. (Go to [v5 branch](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) for Gatsby 4 and lower Gatsby version support)
 | [Version 4](https://github.com/storyblok/gatsby-source-storyblok/tree/v4.2.1) `gatsby-source-storyblok@4`                               | Node 14 and lower Node with no Fetch API support
 
@@ -130,11 +130,11 @@ storyblokInit({
 
 `gatsby-source-storyblok` does three actions when you initialize it:
 
-- Provides a `StoryblokStory` that includes `useStoryblokState` that receives a story object.
+- Provides a `<StoryblokStory />` that includes `useStoryblokState` that receives a story object.
 - Loads [Storyblok Bridge](https://www.storyblok.com/docs/Guides/storyblok-latest-js?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) for real-time visual updates.
 - Provides a `storyblokEditable` function to link editable components to the Storyblok Visual Editor.
 
-> [gatsby-source-storyblok v5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) and lower had `useStoryblokState` that parsed story content JSON into the object. Use `StoryblokStory` instead to handle the Visual Editor live events when editing story.
+> [gatsby-source-storyblok v5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) and lower had `useStoryblokState` that parsed story content JSON into the object. Use `<StoryblokStory />` instead to handle the Visual Editor live events when editing story.
 
 #### 1. Fetching Content & Listen to Storyblok Visual Editor events
 
@@ -171,11 +171,11 @@ export const query = graphql`
 
 > Note: if you don't use `apiPlugin`, you can use your prefered method or function to fetch your data.
 
-Use `StoryblokStory` to get the new story every time is triggered a `change` event from the Visual Editor.
+Use `<StoryblokStory />` to get the new story every time is triggered a `change` event from the Visual Editor.
 
 #### 2. Link your components to Storyblok Visual Editor
 
-`StoryblokStory` keeps the state for thet story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically.
+`<StoryblokStory />` keeps the state for thet story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically.
 
 For every component you've defined in your Storyblok space, call the `storyblokEditable` function with the blok content:
 
@@ -305,7 +305,7 @@ renderRichText(blok.richTextField, {
 
 ### Gatsby feature references
 
-### Prtial Hydration (RSC)
+### Partial Hydration (RSC)
 To enable Partial Hydration, you need to set the `PARTIAL_HYDRATION` flag to `true` in `gatsby-config` file. Here is an example of the usage:
 
 ```js
