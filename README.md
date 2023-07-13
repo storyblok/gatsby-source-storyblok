@@ -130,7 +130,7 @@ storyblokInit({
 
 `gatsby-source-storyblok` does three actions when you initialize it:
 
-- Provides a `<StoryblokStory />` that includes `useStoryblokState` that receives a story object.
+- Provides a `<StoryblokStory />` component to enable live-editting experience for a story, automatically.
 - Loads [Storyblok Bridge](https://www.storyblok.com/docs/Guides/storyblok-latest-js?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok) for real-time visual updates.
 - Provides a `storyblokEditable` function to link editable components to the Storyblok Visual Editor.
 
