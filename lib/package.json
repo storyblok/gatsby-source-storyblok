@@ -10,6 +10,18 @@
     "dist",
     "src"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/gatsby-source-storyblok.mjs",
+      "require": "./dist/gatsby-source-storyblok.js"
+    },
+    "./story": {
+      "types": "./dist/types/story.d.ts",
+      "import": "./dist/gatsby-source-storyblok2.mjs",
+      "require": "./dist/gatsby-source-storyblok2.js"
+    }
+  },
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build && tsc --project tsconfig.json",
@@ -43,6 +55,7 @@
     "react-dom": "^18.2.0",
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.3",
+    "terser": "^5.18.2",
     "vite": "^4.4.4"
   },
   "peerDependencies": {

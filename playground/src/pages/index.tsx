@@ -1,8 +1,6 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 
-//6.0.2
-import { useStoryblokState, StoryblokComponent } from "gatsby-source-storyblok"
 //6.1.0 --> feat: now you can refresh & Won't break StoryblokStory approach
 import StoryblokStory from "gatsby-source-storyblok/story"
 
