@@ -1,7 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
 
-//6.1.0 --> feat: now you can refresh & Won't break StoryblokStory approach
 import { StoryblokStory } from "gatsby-source-storyblok";
 
 import Layout from "../components/layout";
@@ -13,18 +12,6 @@ const IndexPage = ({ data }) => {
       <StoryblokStory story={data.storyblokEntry} />
     </Layout>
   );
-
-  // 🚨 Gatsby V4 support code, old approach -> Move later as a new page in page directory
-  // let story = data.storyblokEntry
-  // story = useStoryblokState(story)
-
-  // const components = story.content.body.map(blok => (<StoryblokComponent blok={blok} key={blok._uid} />))
-
-  // return (
-  //   <Layout>
-  //     {components}
-  //   </Layout>
-  // )
 };
 
 export default IndexPage;
