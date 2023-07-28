@@ -3,16 +3,15 @@
 import React, { forwardRef } from "react";
 import { StoryblokComponent } from "@storyblok/react";
 import { useStoryblokState } from "./src/common";
-import { ISbGatsbyDataEntry } from "./types";
+import { SbGatsbyStory } from "./types";
 
 interface StoryblokStoryProps {
-  data: ISbGatsbyDataEntry;
+  story: SbGatsbyStory;
   [key: string]: unknown;
 }
 
 const StoryblokStory = forwardRef<HTMLElement, StoryblokStoryProps>(
-  ({ data, ...restProps }, ref) => {
-    let story = data.storyblokEntry;
+  ({ story, ...restProps }, ref) => {
     story = useStoryblokState(story);
     return <StoryblokComponent ref={ref} blok={story.content} {...restProps} />;
   }

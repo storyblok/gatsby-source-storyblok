@@ -10,10 +10,6 @@ export interface SbGatsbyStory
   internalId: number;
 }
 
-export interface ISbGatsbyDataEntry {
-  storyblokEntry: SbGatsbyStory;
-}
-
 export type {
   ISbConfig,
   ISbCache,
