@@ -2,7 +2,6 @@ import React from "react";
 import { storyblokEditable, StoryblokComponent } from "gatsby-source-storyblok";
 
 const Page = ({ blok }) => {
-  console.log(blok);
   return (
     <main {...storyblokEditable(blok)}>
       {blok.body.map((nestedBlok) => (

@@ -41,6 +41,7 @@ export const useStoryblokBridge = (
         (event.action === "change" || event.action === "published") &&
         (event.storyId as number) === id
       ) {
+        // @workaround: give extra time to Gatsby to refresh content before reloading
         await refreshDevContent();
         setTimeout(() => {
           window.location.reload();
