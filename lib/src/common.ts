@@ -69,3 +69,5 @@ export function useStoryblokState(
 
   return story;
 }
+
+export { useStoryblokBridge as registerStoryblokBridge };
