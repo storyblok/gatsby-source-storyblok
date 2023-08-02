@@ -175,7 +175,7 @@ Use `<StoryblokStory />` to get the new story every time is triggered a `change`
 
 #### 2. Link your components to Storyblok Visual Editor
 
-`<StoryblokStory />` keeps the state for thet story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically.
+`<StoryblokStory />` keeps the state for the story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically.
 
 For every component you've defined in your Storyblok space, call the `storyblokEditable` function with the blok content:
 
@@ -248,7 +248,7 @@ storyblokInit({});
 
 #### Storyblok Bridge
 
-If you don't use `useStoryblokBridge`, you still have access to the raw `window.StoryblokBridge`:
+If you don't use `registerStoryblokBridge`, you still have access to the raw `window.StoryblokBridge`:
 
 ```js
 const sbBridge = new window.StoryblokBridge(options);
@@ -377,16 +377,13 @@ For more info regarding `createPages` see the Gatsby docs: [docs/reference/confi
 2a. You need to create a [template](https://www.gatsbyjs.org/docs/programmatically-create-pages-from-data/#specifying-a-template) file to get the data from GraphQL
 
 ```js
-import { useStoryblokState } from "gatsby-source-storyblok"
-import Layout from "../components/layout"
+import { StoryblokStory } from "gatsby-source-storyblok";
+import Layout from "../components/layout";
 
 export default function StoryblokEntry ({ data }) {
-  const story = data.storyblokEntry
-  story = useStoryblokState(story)
-
   return (
     <Layout>
-      <div>{story.name}</div>
+      <StoryblokStory story={data.storyblokEntry} />
     </Layout>
   )
 }
@@ -458,16 +455,14 @@ For more info regarding The File System Routes API see the Gatsby docs: [docs/re
 3b. Gatsby will use ths page template for each `storyblokEntry`
 
 ```js
-import { useStoryblokState } from "gatsby-source-storyblok"
-import Layout from "../components/layout"
+import { StoryblokStory } from "gatsby-source-storyblok";
+
+import Layout from "../components/layout";
 
 export default function StoryblokEntry ({ data }) {
-  const story = data.storyblokEntry
-  story = useStoryblokState(story)
-
   return (
     <Layout>
-      <div>{story.name}</div>
+      <StoryblokStory story={data.storyblokEntry} />
     </Layout>
   )
 }
