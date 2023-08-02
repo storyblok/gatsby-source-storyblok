@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "isolatedModules": true,
     "target": "ESNext",
     "strict": false,
@@ -17,6 +18,7 @@
   "display": "Recommended",
   "include": [
     "./index.ts",
+    "./story.tsx",
     "./types.ts"
   ],
   "exclude": [

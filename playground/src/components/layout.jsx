@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 "use client";
-import React, { useEffect } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import { storyblokInit, apiPlugin } from "gatsby-source-storyblok"
 import Teaser from './Teaser'

@@ -1,9 +1,14 @@
-import type { ISbStoryData, StoryblokComponentType } from "@storyblok/react/rsc";
+import type {
+  ISbStoryData,
+  StoryblokComponentType,
+} from "@storyblok/react/rsc";
 
-export interface SbGatsbyStory extends ISbStoryData<StoryblokComponentType<string> & { [index: string]: any; }> {
-  internalId: number
+export interface SbGatsbyStory
+  extends ISbStoryData<
+    StoryblokComponentType<string> & { [index: string]: any }
+  > {
+  internalId: number;
 }
-
 
 export type {
   ISbConfig,
