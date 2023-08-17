@@ -12,8 +12,8 @@ interface StoryblokStoryProps {
 }
 
 const StoryblokStory = forwardRef<HTMLElement, StoryblokStoryProps>(
-  ({ story, ...restProps }, ref) => {
-    story = useStoryblokState(story);
+  ({ story, bridgeOptions, ...restProps }, ref) => {
+    story = useStoryblokState(story, bridgeOptions);
     return <StoryblokComponent ref={ref} blok={story.content} {...restProps} />;
   }
 );
