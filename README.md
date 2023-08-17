@@ -175,7 +175,17 @@ Use `<StoryblokStory />` to get the new story every time is triggered a `change`
 
 #### 2. Link your components to Storyblok Visual Editor
 
-`<StoryblokStory />` keeps the state for the story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically.
+`<StoryblokStory />` keeps the state for the story behind the scenes and uses `StoryblokComponent` to render the route components dynamically, using the list of components loaded during the initialization inside the storyblokInit function. You can use the `StoryblokComponent` inside the components to redner the nested components dynamically. You can also pass bridge options to `<StoryblokStory />` using the prop `bridgeOptions`.
+
+```js
+<StoryblokStory
+  story={data.story}
+  bridgeOptions={{
+    resolveRelations: ["Article.author"],
+    resolveLinks: "url",
+    preventClicks: true
+  }} />
+```
 
 For every component you've defined in your Storyblok space, call the `storyblokEditable` function with the blok content:
 
