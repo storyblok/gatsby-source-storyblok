@@ -20,7 +20,7 @@
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.6.7",
     "eslint": "^8.47.0",
-    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react": "^7.33.2",
     "husky": "^8.0.1",
     "lint-staged": "^14.0.0",
