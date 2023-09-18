@@ -32,7 +32,7 @@
     "@babel/core": "^7.22.17",
     "@babel/preset-env": "^7.22.15",
     "@cypress/vite-dev-server": "^5.0.6",
-    "@tsconfig/recommended": "^1.0.2",
+    "@tsconfig/recommended": "^1.0.3",
     "@vitejs/plugin-react": "^4.0.4",
     "babel-jest": "^29.6.3",
     "cypress": "^13.2.0",
