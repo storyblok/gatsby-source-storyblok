@@ -783,6 +783,7 @@ type Query = {
   readonly allSitePage: SitePageConnection;
   readonly allSitePlugin: SitePluginConnection;
   readonly allStoryblokEntry: StoryblokEntryConnection;
+  readonly allStoryblokLink: StoryblokLinkConnection;
   readonly allStoryblokSpace: StoryblokSpaceConnection;
   readonly directory: Maybe<Directory>;
   readonly file: Maybe<File>;
@@ -792,6 +793,7 @@ type Query = {
   readonly sitePage: Maybe<SitePage>;
   readonly sitePlugin: Maybe<SitePlugin>;
   readonly storyblokEntry: Maybe<StoryblokEntry>;
+  readonly storyblokLink: Maybe<StoryblokLink>;
   readonly storyblokSpace: Maybe<StoryblokSpace>;
 };
 
@@ -857,6 +859,14 @@ type Query_allStoryblokEntryArgs = {
   limit: InputMaybe<Scalars['Int']>;
   skip: InputMaybe<Scalars['Int']>;
   sort: InputMaybe<ReadonlyArray<InputMaybe<StoryblokEntrySortInput>>>;
+};
+
+
+type Query_allStoryblokLinkArgs = {
+  filter: InputMaybe<StoryblokLinkFilterInput>;
+  limit: InputMaybe<Scalars['Int']>;
+  skip: InputMaybe<Scalars['Int']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<StoryblokLinkSortInput>>>;
 };
 
 
@@ -1048,6 +1058,25 @@ type Query_storyblokEntryArgs = {
   path: InputMaybe<StringQueryOperatorInput>;
   position: InputMaybe<IntQueryOperatorInput>;
   published_at: InputMaybe<DateQueryOperatorInput>;
+  slug: InputMaybe<StringQueryOperatorInput>;
+  uuid: InputMaybe<StringQueryOperatorInput>;
+};
+
+
+type Query_storyblokLinkArgs = {
+  children: InputMaybe<NodeFilterListInput>;
+  id: InputMaybe<StringQueryOperatorInput>;
+  internal: InputMaybe<InternalFilterInput>;
+  internalId: InputMaybe<IntQueryOperatorInput>;
+  is_folder: InputMaybe<BooleanQueryOperatorInput>;
+  is_startpage: InputMaybe<BooleanQueryOperatorInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
+  parent: InputMaybe<NodeFilterInput>;
+  parent_id: InputMaybe<IntQueryOperatorInput>;
+  path: InputMaybe<StringQueryOperatorInput>;
+  position: InputMaybe<IntQueryOperatorInput>;
+  published: InputMaybe<BooleanQueryOperatorInput>;
+  real_path: InputMaybe<StringQueryOperatorInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
   uuid: InputMaybe<StringQueryOperatorInput>;
 };
@@ -2077,6 +2106,164 @@ type StoryblokEntrySortInput = {
   readonly path: InputMaybe<SortOrderEnum>;
   readonly position: InputMaybe<SortOrderEnum>;
   readonly published_at: InputMaybe<SortOrderEnum>;
+  readonly slug: InputMaybe<SortOrderEnum>;
+  readonly uuid: InputMaybe<SortOrderEnum>;
+};
+
+type StoryblokLink = Node & {
+  readonly children: ReadonlyArray<Node>;
+  readonly id: Scalars['ID'];
+  readonly internal: Internal;
+  readonly internalId: Maybe<Scalars['Int']>;
+  readonly is_folder: Maybe<Scalars['Boolean']>;
+  readonly is_startpage: Maybe<Scalars['Boolean']>;
+  readonly name: Maybe<Scalars['String']>;
+  readonly parent: Maybe<Node>;
+  readonly parent_id: Maybe<Scalars['Int']>;
+  readonly path: Maybe<Scalars['String']>;
+  readonly position: Maybe<Scalars['Int']>;
+  readonly published: Maybe<Scalars['Boolean']>;
+  readonly real_path: Maybe<Scalars['String']>;
+  readonly slug: Maybe<Scalars['String']>;
+  readonly uuid: Maybe<Scalars['String']>;
+};
+
+type StoryblokLinkConnection = {
+  readonly distinct: ReadonlyArray<Scalars['String']>;
+  readonly edges: ReadonlyArray<StoryblokLinkEdge>;
+  readonly group: ReadonlyArray<StoryblokLinkGroupConnection>;
+  readonly max: Maybe<Scalars['Float']>;
+  readonly min: Maybe<Scalars['Float']>;
+  readonly nodes: ReadonlyArray<StoryblokLink>;
+  readonly pageInfo: PageInfo;
+  readonly sum: Maybe<Scalars['Float']>;
+  readonly totalCount: Scalars['Int'];
+};
+
+
+type StoryblokLinkConnection_distinctArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+
+type StoryblokLinkConnection_groupArgs = {
+  field: StoryblokLinkFieldSelector;
+  limit: InputMaybe<Scalars['Int']>;
+  skip: InputMaybe<Scalars['Int']>;
+};
+
+
+type StoryblokLinkConnection_maxArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+
+type StoryblokLinkConnection_minArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+
+type StoryblokLinkConnection_sumArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+type StoryblokLinkEdge = {
+  readonly next: Maybe<StoryblokLink>;
+  readonly node: StoryblokLink;
+  readonly previous: Maybe<StoryblokLink>;
+};
+
+type StoryblokLinkFieldSelector = {
+  readonly children: InputMaybe<NodeFieldSelector>;
+  readonly id: InputMaybe<FieldSelectorEnum>;
+  readonly internal: InputMaybe<InternalFieldSelector>;
+  readonly internalId: InputMaybe<FieldSelectorEnum>;
+  readonly is_folder: InputMaybe<FieldSelectorEnum>;
+  readonly is_startpage: InputMaybe<FieldSelectorEnum>;
+  readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
+  readonly parent_id: InputMaybe<FieldSelectorEnum>;
+  readonly path: InputMaybe<FieldSelectorEnum>;
+  readonly position: InputMaybe<FieldSelectorEnum>;
+  readonly published: InputMaybe<FieldSelectorEnum>;
+  readonly real_path: InputMaybe<FieldSelectorEnum>;
+  readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly uuid: InputMaybe<FieldSelectorEnum>;
+};
+
+type StoryblokLinkFilterInput = {
+  readonly children: InputMaybe<NodeFilterListInput>;
+  readonly id: InputMaybe<StringQueryOperatorInput>;
+  readonly internal: InputMaybe<InternalFilterInput>;
+  readonly internalId: InputMaybe<IntQueryOperatorInput>;
+  readonly is_folder: InputMaybe<BooleanQueryOperatorInput>;
+  readonly is_startpage: InputMaybe<BooleanQueryOperatorInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
+  readonly parent: InputMaybe<NodeFilterInput>;
+  readonly parent_id: InputMaybe<IntQueryOperatorInput>;
+  readonly path: InputMaybe<StringQueryOperatorInput>;
+  readonly position: InputMaybe<IntQueryOperatorInput>;
+  readonly published: InputMaybe<BooleanQueryOperatorInput>;
+  readonly real_path: InputMaybe<StringQueryOperatorInput>;
+  readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly uuid: InputMaybe<StringQueryOperatorInput>;
+};
+
+type StoryblokLinkGroupConnection = {
+  readonly distinct: ReadonlyArray<Scalars['String']>;
+  readonly edges: ReadonlyArray<StoryblokLinkEdge>;
+  readonly field: Scalars['String'];
+  readonly fieldValue: Maybe<Scalars['String']>;
+  readonly group: ReadonlyArray<StoryblokLinkGroupConnection>;
+  readonly max: Maybe<Scalars['Float']>;
+  readonly min: Maybe<Scalars['Float']>;
+  readonly nodes: ReadonlyArray<StoryblokLink>;
+  readonly pageInfo: PageInfo;
+  readonly sum: Maybe<Scalars['Float']>;
+  readonly totalCount: Scalars['Int'];
+};
+
+
+type StoryblokLinkGroupConnection_distinctArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+
+type StoryblokLinkGroupConnection_groupArgs = {
+  field: StoryblokLinkFieldSelector;
+  limit: InputMaybe<Scalars['Int']>;
+  skip: InputMaybe<Scalars['Int']>;
+};
+
+
+type StoryblokLinkGroupConnection_maxArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+
+type StoryblokLinkGroupConnection_minArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+
+type StoryblokLinkGroupConnection_sumArgs = {
+  field: StoryblokLinkFieldSelector;
+};
+
+type StoryblokLinkSortInput = {
+  readonly children: InputMaybe<NodeSortInput>;
+  readonly id: InputMaybe<SortOrderEnum>;
+  readonly internal: InputMaybe<InternalSortInput>;
+  readonly internalId: InputMaybe<SortOrderEnum>;
+  readonly is_folder: InputMaybe<SortOrderEnum>;
+  readonly is_startpage: InputMaybe<SortOrderEnum>;
+  readonly name: InputMaybe<SortOrderEnum>;
+  readonly parent: InputMaybe<NodeSortInput>;
+  readonly parent_id: InputMaybe<SortOrderEnum>;
+  readonly path: InputMaybe<SortOrderEnum>;
+  readonly position: InputMaybe<SortOrderEnum>;
+  readonly published: InputMaybe<SortOrderEnum>;
+  readonly real_path: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
   readonly uuid: InputMaybe<SortOrderEnum>;
 };

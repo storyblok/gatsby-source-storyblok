@@ -19,6 +19,7 @@ const config: GatsbyConfig = {
         accessToken: 'OurklwV5XsDJTIE1NJaD2wtt',
         version: 'draft',
         localAssets: true,
+        includeLinks: true,
       }
     },
   ],
