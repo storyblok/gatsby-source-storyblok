@@ -5,7 +5,6 @@ import type {
   StoryblokBridgeConfigV2
 } from '../types'
 
-
 export const useStoryblokBridge = (
   id: Number,
   cb: (newStory) => void,

@@ -113,6 +113,8 @@ That's it! All the features are enabled for you: the _API Client_ for interactin
 Possible values:
 - `eu` (default): For spaces created in EU
 - `us` : For spaces created in the US
+- `ap`: For spaces created in Australia
+- `ca`: For spaces created in Canada
 - `cn` : For spaces created in China
 
 Full example for a space created in the US:
