@@ -23,7 +23,7 @@
     "prepublishOnly": "npm run build && cp ../README.md ./"
   },
   "dependencies": {
-    "@storyblok/react": "^3.0.5",
+    "@storyblok/react": "^3.0.8",
     "gatsby-source-filesystem": "^5.13.0",
     "isomorphic-fetch": "^3.0.0",
     "json-stringify-safe": "^5.0.1"
