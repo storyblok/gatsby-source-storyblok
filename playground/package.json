@@ -20,7 +20,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "gatsby-source-storyblok": "^1.0.0",
-    "@types/node": "^20.11.22",
+    "@types/node": "^20.12.7",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.22",
     "typescript": "^5.3.2"
