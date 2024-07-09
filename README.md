@@ -42,11 +42,11 @@ npm install gatsby-source-storyblok
 
 #### Compatibility
 
-| Version to install                                                                                                              | Support                                              |
-| ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Latest >v6 `gatsby-source-storyblok`                                                                                                    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. Supports Gatsby 5 (React Server Components)                            |
-| [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) `gatsby-source-storyblok@5 `                               | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. (Go to [v5 branch](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) for Gatsby 4 and lower Gatsby version support)
-| [Version 4](https://github.com/storyblok/gatsby-source-storyblok/tree/v4.2.1) `gatsby-source-storyblok@4`                               | Node 14 and lower Node with no Fetch API support
+| Version to install                                                                                        | Support                                                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Latest >v6 `gatsby-source-storyblok`                                                                      | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. Supports Gatsby 5 (React Server Components)                                                                                     |
+| [Version 5](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) `gatsby-source-storyblok@5 `    | Modern browsers + Node 16+. [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) is implemented. (Go to [v5 branch](https://github.com/storyblok/gatsby-source-storyblok/tree/v5) for Gatsby 4 and lower Gatsby version support) |
+| [Version 4](https://github.com/storyblok/gatsby-source-storyblok/tree/v4.2.1) `gatsby-source-storyblok@4` | Node 14 and lower Node with no Fetch API support                                                                                                                                                                                                    |
 
 ### Initialization
 
@@ -111,6 +111,7 @@ That's it! All the features are enabled for you: the _API Client_ for interactin
 #### Region parameter
 
 Possible values:
+
 - `eu` (default): For spaces created in EU
 - `us` : For spaces created in the US
 - `ap`: For spaces created in Australia
@@ -123,7 +124,7 @@ Full example for a space created in the US:
 storyblokInit({
   accessToken: "<your-access-token>",
   apiOptions: {
-    region: 'us'
+    region: "us",
   },
 });
 ```
@@ -145,21 +146,22 @@ Query data from GraphQL:
 `src/pages/index.tsx`
 
 ```js
-import { StoryblokStory } from "gatsby-source-storyblok"
+import { StoryblokStory } from "gatsby-source-storyblok";
 
-import Layout from "../components/layout"
+import Layout from "../components/layout";
 
 const IndexPage = ({ data }) => {
-  if (typeof data.storyblokEntry.content === "string") data.storyblokEntry.content = JSON.parse(data.storyblokEntry.content);
+  if (typeof data.storyblokEntry.content === "string")
+    data.storyblokEntry.content = JSON.parse(data.storyblokEntry.content);
 
   return (
     <Layout>
       <StoryblokStory story={data.storyblokEntry} />
     </Layout>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;
 
 export const query = graphql`
   query HomeQuery {
@@ -168,7 +170,7 @@ export const query = graphql`
       full_slug
     }
   }
-`
+`;
 ```
 
 > Note: if you don't use `apiPlugin`, you can use your prefered method or function to fetch your data.
@@ -185,8 +187,9 @@ Use `<StoryblokStory />` to get the new story every time is triggered a `change`
   bridgeOptions={{
     resolveRelations: ["Article.author"],
     resolveLinks: "url",
-    preventClicks: true
-  }} />
+    preventClicks: true,
+  }}
+/>
 ```
 
 For every component you've defined in your Storyblok space, call the `storyblokEditable` function with the blok content:
@@ -271,12 +274,16 @@ sbBridge.on(["input", "published", "change"], (event) => {
 ```
 
 #### Rendering Rich Text
+
 You can easily render rich text by using the `renderRichText` function that comes with `gatsby-source-storyblok`:
+
 ```js
 import { renderRichText } from "gatsby-source-storyblok";
 const renderedRichText = renderRichText(blok.richtext);
 ```
+
 You can set a **custom Schema and component resolver globally** at init time by using the `richText` init option:
+
 ```js
 import { RichTextSchema, storyblokInit } from "gatsby-source-storyblok";
 import cloneDeep from "clone-deep";
@@ -298,7 +305,9 @@ storyblokInit({
   },
 });
 ```
+
 You can also set a **custom Schema and component resolver only once** by passing the options as the second parameter to `renderRichText` function:
+
 ```js
 import { renderRichText } from "gatsby-source-storyblok";
 renderRichText(blok.richTextField, {
@@ -318,15 +327,15 @@ renderRichText(blok.richTextField, {
 ### Gatsby feature references
 
 ### Partial Hydration (RSC)
+
 To enable Partial Hydration, you need to set the `PARTIAL_HYDRATION` flag to `true` in `gatsby-config` file. Here is an example of the usage:
 
 ```js
 module.exports = {
   flags: {
-    PARTIAL_HYDRATION: true
-  }
-}
-
+    PARTIAL_HYDRATION: true,
+  },
+};
 ```
 
 When enabling Partial Hydration, all components act as server component by default. For more details such as benefits in terms of performance, please refer to the [Gatsby docs](https://www.gatsbyjs.com/docs/how-to/performance/partial-hydration/).
@@ -336,10 +345,12 @@ To define a component to act as a client component, use `"use client"` directive
 `layout.jsx`
 
 ```js
-"use client" // Required for Partial Hydration, client components (RSC)
-import configuration from '../../gatsby-config'
+"use client"; // Required for Partial Hydration, client components (RSC)
+import configuration from "../../gatsby-config";
 
-const sbConfig = configuration.plugins.find((item) => item.resolve === 'gatsby-source-storyblok')
+const sbConfig = configuration.plugins.find(
+  (item) => item.resolve === "gatsby-source-storyblok"
+);
 
 storyblokInit({
   // ...
@@ -353,25 +364,25 @@ storyblokInit({
 You need to set the `localAssets` option to `true`. Here is an example of the usage:
 
 ```js
-import { graphql } from "gatsby"
-import { GatsbyImage, getImage } from "gatsby-plugin-image"
+import { graphql } from "gatsby";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 function BlogPost({ data }) {
-  const image = getImage(data.file)
+  const image = getImage(data.file);
   return (
     <section>
       <GatsbyImage image={image} />
     </section>
-  )
+  );
 }
 
 export const pageQuery = graphql`
   query {
-    file(name: {eq: "demo"}) {
+    file(name: { eq: "demo" }) {
       absolutePath
       url
       childImageSharp {
-         gatsbyImageData(
+        gatsbyImageData(
           width: 200
           placeholder: BLURRED
           formats: [AUTO, WEBP, AVIF]
@@ -379,7 +390,7 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
 ```
 
 #### With Gatsby's createPages
@@ -392,36 +403,36 @@ For more info regarding `createPages` see the Gatsby docs: [docs/reference/confi
 import { StoryblokStory } from "gatsby-source-storyblok";
 import Layout from "../components/layout";
 
-export default function StoryblokEntry ({ data }) {
+export default function StoryblokEntry({ data }) {
   return (
     <Layout>
       <StoryblokStory story={data.storyblokEntry} />
     </Layout>
-  )
+  );
 }
 
 export const query = graphql`
-  query($slug: String!) {
+  query ($slug: String!) {
     storyblokEntry(full_slug: { eq: $full_slug }) {
       internalId
       name
       full_slug
     }
   }
-`
+`;
 ```
 
 3a. After this, you need to create the pages for your application. For this, edit your `gatsby-node.js`.
 
 ```js
-const path = require('path')
+const path = require("path");
 
 exports.createPages = async ({ graphql, actions }) => {
-  const storyblokEntry = path.resolve('src/templates/storyblok-entry.js')
+  const storyblokEntry = path.resolve("src/templates/storyblok-entry.js");
 
   // querying the storyblok data from GraphQL data layer
-  const { data } = await graphql(
-    `query {
+  const { data } = await graphql(`
+    query {
       allStoryblokEntry {
         edges {
           node {
@@ -430,25 +441,24 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
-    }`
-  )
+    }
+  `);
 
   // creating pages using createPage function like described in the documentation
   // https://www.gatsbyjs.org/docs/programmatically-create-pages-from-data/#creating-pages
-  data.allStoryblokEntry.edges.forEach(edge => {
-    const full_slug = edge.node.full_slug
+  data.allStoryblokEntry.edges.forEach((edge) => {
+    const full_slug = edge.node.full_slug;
 
     actions.createPage({
       path: full_slug,
       component: storyblokEntry,
       context: {
-        slug: full_slug
+        slug: full_slug,
       },
-    })
-  })
-}
+    });
+  });
+};
 ```
-
 
 #### With Gatsby's File System Routes API
 
@@ -456,13 +466,11 @@ For more info regarding The File System Routes API see the Gatsby docs: [docs/re
 
 2b. Create a collection route inside `src/pages`
 
-
 ```
 |-- src
    |-- pages
       |-- {storyblokEntry.full_slug}.js
 ```
-
 
 3b. Gatsby will use ths page template for each `storyblokEntry`
 
@@ -471,12 +479,12 @@ import { StoryblokStory } from "gatsby-source-storyblok";
 
 import Layout from "../components/layout";
 
-export default function StoryblokEntry ({ data }) {
+export default function StoryblokEntry({ data }) {
   return (
     <Layout>
       <StoryblokStory story={data.storyblokEntry} />
     </Layout>
-  )
+  );
 }
 
 export const query = graphql`
@@ -487,7 +495,7 @@ export const query = graphql`
       full_slug
     }
   }
-`
+`;
 ```
 
 #### The options object in details
@@ -506,13 +514,15 @@ export const query = graphql`
 }
 ```
 
-* `accessToken`: Your Storyblok draft token
-* `version`: 'draft' or 'published'
-* `timeout`: Optionally provide a timeout for the api request
-* `resolveLinks`: This will automatically resolve internal links of the multilink field type. If the value is `story` the whole story object will be included.  If the value is `url` only uuid, id, name, path, slug and url (url is a computed property which returns the "Real path" if defined to use it for navigation links) will be included.
-* `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['article.related_articles', 'article.author'].
-* `includeLinks`: If 'true' you can query links by allStoryblokLinkEntry. The links query lets you create a dynamic navigation tree as it includes also content folders.
-* `languages`: An array of strings that will be used in languages request instead of languages in space settings. Use it to only load the languages that you want to.
+- `accessToken`: Your Storyblok draft token
+- `version`: 'draft' or 'published'
+- `timeout`: Optionally provide a timeout for the api request
+- `resolveLinks`: This will automatically resolve internal links of the multilink field type. If the value is `story` the whole story object will be included. If the value is `url` only uuid, id, name, path, slug and url (url is a computed property which returns the "Real path" if defined to use it for navigation links) will be included.
+- `resolveRelations`: Resolve relationships to other Stories (in the first level of nesting) of a multi-option or single-option field-type. Provide the field key(s) as array to resolve specific fields. Example: ['article.related_articles', 'article.author'].
+- `includeLinks`: If 'true' you can query links by allStoryblokLinkEntry. The links query lets you create a dynamic navigation tree as it includes also content folders.
+- `languages`: An array of strings that will be used in languages request instead of languages in space settings. Use it to only load the languages that you want to.
+- `includeDatasources`: If undefined or not defined, fetches all datasources. If an array of specific datasources is provided, only those datasources are fetched. If an empty array, no datasources are fetched.
+- `includeTags`: If true, fetches all tags. If false, does not fetch tags.
 
 #### How to query all Content Entries
 
@@ -575,10 +585,9 @@ If you use field level translations you can filter for a specific language using
 }
 ```
 
-
 ##### How to query filtering on content type fields
 
-Every field of your content types is available via the prefix ```field_```.
+Every field of your content types is available via the prefix `field_`.
 
 This lets you for example to query for a specific component:
 
@@ -595,8 +604,8 @@ This lets you for example to query for a specific component:
 }
 ```
 
-
 #### How to query a single content entry
+
 ```GraphQL
 {
   storyblokEntry(slug: { eq: "global-navi" }) {
@@ -655,6 +664,7 @@ allStoryblokDatasourceEntry(filter: { data_source: { eq: "DATASOURCE_SLUG" }, da
 ```
 
 #### How to query links
+
 Use the links api to create a dynamic navigation tree. To use this query you need to add `includeLinks: true` in the plugin options.
 
 ```GraphQL
