@@ -1,3 +1,7 @@
+> [!WARNING]
+> **DEPRECATED**: This package is no longer maintained. We recommend considering Next.js or Remix as the new industry standards, used along with our [React SDK](https://github.com/storyblok/storyblok-react).
+
+
 <div align="center">
 	<a href="https://www.storyblok.com?utm_source=github.com&utm_medium=readme&utm_campaign=gatsby-source-storyblok" align="center">
 		<img src="https://a.storyblok.com/f/88751/1776x360/66e302b912/sb-gatsby-githero.png"  alt="Storyblok Logo">
@@ -8,6 +12,7 @@
   </p>
   <br />
 </div>
+
 
 <p align="center">
   <a href="https://www.npmjs.com/package/gatsby-source-storyblok">
