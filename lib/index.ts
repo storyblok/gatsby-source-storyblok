@@ -1,3 +1,7 @@
+/**
+ * @deprecated This package is deprecated as Gatsby has been sunset. Please use our official Storyblok React SDK instead: https://github.com/storyblok/storyblok-react
+ */
+
 export {
   storyblokInit,
   apiPlugin,
